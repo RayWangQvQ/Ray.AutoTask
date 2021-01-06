@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -14,7 +15,8 @@ namespace Ray.AutoTask
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+
+            Console.ReadLine();
         }
 
         /// <summary>
