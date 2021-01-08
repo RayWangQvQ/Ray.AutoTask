@@ -40,7 +40,7 @@ jobs:
     # 发布
     - name: Publish
       run: |
-        cd ./src/Ray.BiliBiliTool.Console
+        cd ./src/Ray.AutoTask
         dotnet publish --configuration Release --self-contained false --output ./bin/Publish/net5-dependent
        
     # 运行
