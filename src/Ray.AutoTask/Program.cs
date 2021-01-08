@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Ray.AutoTask.Options;
+using Ray.AutoTask.Tasks;
 using Ray.Infrastructure;
 using Ray.Infrastructure.Config;
+using Ray.Infrastructure.Extensions;
 using Serilog;
 
 namespace Ray.AutoTask
@@ -15,8 +21,11 @@ namespace Ray.AutoTask
     {
         static void Main(string[] args)
         {
+            Init(args);
 
-            Console.ReadLine();
+            LogAppInfo();
+
+            StartRun();
         }
 
         /// <summary>
@@ -63,6 +72,21 @@ namespace Ray.AutoTask
             hostBuilder.ConfigureServices((hostContext, services) =>
             {
                 Global.ConfigurationRoot = (IConfigurationRoot)hostContext.Configuration;
+
+                services.AddOptions()
+                    .Configure<TaskOptions>(Global.ConfigurationRoot.GetSection("Tasks"));
+
+                services.AddHttpClient();
+
+                services.Scan(scan =>
+                {
+                    scan.FromAssemblyOf<Program>()
+                        .AddClasses(c =>
+                            c.AssignableTo<BaseTask>()
+                                .Where(t => t.IsClass))
+                        .As<BaseTask>()
+                        .WithTransientLifetime();
+                });
             });
 
             IHost host = hostBuilder.UseConsoleLifetime().Build();
@@ -73,9 +97,11 @@ namespace Ray.AutoTask
         /// <summary>
         /// 打印应用信息
         /// </summary>
-        /// <param name="logger"></param>
-        private static void LogAppInfo(Microsoft.Extensions.Logging.ILogger logger)
+        private static void LogAppInfo()
         {
+            using var scope = Global.ServiceProviderRoot.CreateScope();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
             logger.LogInformation(
                 "版本号：{version}",
                 typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "未知");
@@ -88,7 +114,29 @@ namespace Ray.AutoTask
         /// </summary>
         private static void StartRun()
         {
+            using var scope = Global.ServiceProviderRoot.CreateScope();
 
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            var taskOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<TaskOptions>>().CurrentValue;
+            var taskServices = scope.ServiceProvider.GetRequiredService<IEnumerable<BaseTask>>();
+
+            foreach (var taskInfo in taskOptions.List)
+            {
+                taskInfo.MapToClient = taskInfo.MapToClient.IsNullOrEmpty() ? "DefaultTask" : taskInfo.MapToClient;
+                var service = taskServices.FirstOrDefault(x => x.GetType().Name == taskInfo.MapToClient);
+
+                try
+                {
+                    service?.DoTask(taskInfo);
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e.ToJson());
+                    throw;
+                }
+            }
+
+            logger.LogInformation("开始推送");
         }
     }
 }

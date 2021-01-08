@@ -52,5 +52,27 @@ namespace Ray.Infrastructure.Extensions
                 valueSetter: v => v.Value as string,
                 otherAction: otherAction);
         }
+
+        public static Dictionary<string, string> AddOrUpdate(this Dictionary<string, string> dictionary, Dictionary<string, string> add)
+        {
+            foreach (var item in add ?? new Dictionary<string, string>())
+            {
+                dictionary[item.Key] = item.Value;
+            }
+
+            return dictionary;
+        }
+
+        public static Dictionary<string, string> Merge(this Dictionary<string, string> dictionary, Dictionary<string, string> add, List<string> remove)
+        {
+            dictionary.AddOrUpdate(add);
+
+            foreach (var item in remove ?? new List<string>())
+            {
+                dictionary.Remove(item);
+            }
+
+            return dictionary;
+        }
     }
 }
