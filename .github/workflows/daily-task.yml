@@ -15,7 +15,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    environment: ${{secrets.ENV}}
+    environment: Production
 
     steps:
 
