@@ -69,7 +69,7 @@ namespace Ray.AutoTask.Tasks
         /// </summary>
         public virtual void BuildHeaders(TaskInfo taskInfo)
         {
-            if (taskInfo.Headers.Remove.RemoveAll) return;
+            if (taskInfo.Headers?.Remove?.RemoveAll == true) return;
             Client.DefaultRequestHeaders.AddHeaders(TaskOptions.DefaultHeaders, taskInfo.Headers?.Add, taskInfo.Headers?.Remove?.List);
         }
 
@@ -78,7 +78,7 @@ namespace Ray.AutoTask.Tasks
         /// </summary>
         public virtual void BuildCookies(TaskInfo taskInfo)
         {
-            if (taskInfo.Cookies.Remove.RemoveAll) return;
+            if (taskInfo.Cookies?.Remove?.RemoveAll == true) return;
 
             var dic = TaskOptions.DefaultCookies;
             dic.Merge(taskInfo.Cookies?.Add, taskInfo.Cookies?.Remove?.List);
