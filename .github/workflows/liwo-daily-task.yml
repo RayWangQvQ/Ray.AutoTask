@@ -49,14 +49,14 @@ jobs:
         ASPNETCORE_ENVIRONMENT: ${{secrets.ENV}} # 运行环境
         Ray_Serilog__WriteTo__4__Args__webHookUrl: ${{secrets.PUSHWEIXINAPI}}
         Ray_Serilog__WriteTo__6__Args__webHookUrl: ${{secrets.PUSHDINGAPI}}
-        Ray_Tasks__List__0__Open: ${{secrets.0OPEN}}
+        Ray_Tasks__List__0__Open: ${{secrets.ONEOPEN}}
         Ray_Tasks__DefaultHeaders__Referer: ${{secrets.Referer}}
         Ray_Tasks__DefaultHeaders__Origin: ${{secrets.Origin}}
         Ray_Tasks__DefaultHeaders__Sec_Fetch_Mode: ${{secrets.Sec_Fetch_Mode}}
         Ray_Tasks__DefaultHeaders__Sec-Fetch-Site: ${{secrets.Sec-Fetch-Site}}
         Ray_Tasks__DefaultHeaders__Host: ${{secrets.Host}}
         Ray_Tasks__List__1__Name: 签到
-        Ray_Tasks__List__1__Open: ${{secrets.1Open}}
+        Ray_Tasks__List__1__Open: ${{secrets.TWOOPEN}}
         Ray_Tasks__List__1__MapToClient: SignInTask
         Ray_Tasks__List__1__Api: ${{secrets.Api}}
         Ray_Tasks__List__1__Cookies__Add__pt_pin: ${{secrets.PIN}}
