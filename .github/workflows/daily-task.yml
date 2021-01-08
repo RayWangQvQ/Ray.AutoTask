@@ -49,4 +49,5 @@ jobs:
         ASPNETCORE_ENVIRONMENT: ${{secrets.ENV}} # 运行环境
       run: |
         cd ./src/Ray.AutoTask/bin/Publish/net5-dependent
+        ${{secrets.PRECMD}}
         dotnet Ray.AutoTask.dll -closeConsoleWhenEnd=1
