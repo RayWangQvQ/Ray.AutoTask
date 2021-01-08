@@ -1,0 +1,72 @@
+name: daily-task
+
+
+on:
+  
+  workflow_dispatch: # 手动触发
+  schedule: # 计划任务触发
+    - cron: '0 16 * * *' 
+    # cron表达式，时区是UTC时间，比我们早8小时，如上所表示的是每天0点0分（24点整）
+    # 建议每个人通过设置 GitHub Environments 的方式来设定为自己的目标运行时间（详细设置方法见文档说明）
+    
+
+jobs:
+  run-bilibili-tool:
+
+    runs-on: ubuntu-latest
+
+    environment: LiWo
+
+    steps:
+
+    # 输出IP
+    - name: IP
+      run: sudo curl ifconfig.me
+
+    # 设置服务器时区为东八区 
+    - name: Set time zone
+      run: sudo timedatectl set-timezone 'Asia/Shanghai'
+
+    # 检出
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    # .Net 环境
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    # 发布
+    - name: Publish
+      run: |
+        cd ./src/Ray.AutoTask
+        dotnet publish --configuration Release --self-contained false --output ./bin/Publish/net5-dependent
+       
+    # 运行
+    - name: Run APP
+      env:
+        ASPNETCORE_ENVIRONMENT: ${{secrets.ENV}} # 运行环境
+        Ray_Serilog__WriteTo__4__Args__webHookUrl: ${{secrets.PUSHWEIXINAPI}}
+        Ray_Serilog__WriteTo__6__Args__webHookUrl: ${{secrets.PUSHDINGAPI}}
+        Ray_Tasks__List__0__Open: ${{secrets.0OPEN}}
+        Ray_Tasks__DefaultHeaders__Referer: ${{secrets.Referer}}
+        Ray_Tasks__DefaultHeaders__Origin: ${{secrets.Origin}}
+        Ray_Tasks__DefaultHeaders__Sec_Fetch_Mode: ${{secrets.Sec_Fetch_Mode}}
+        Ray_Tasks__DefaultHeaders__Sec-Fetch-Site: ${{secrets.Sec-Fetch-Site}}
+        Ray_Tasks__DefaultHeaders__Host: ${{secrets.Host}}
+        Ray_Tasks__List__1__Name: 签到
+        Ray_Tasks__List__1__Open: ${{secrets.1Open}}
+        Ray_Tasks__List__1__MapToClient: SignInTask
+        Ray_Tasks__List__1__Api: ${{secrets.Api}}
+        Ray_Tasks__List__1__Cookies__Add__pt_pin: ${{secrets.PIN}}
+        Ray_Tasks__List__1__Cookies__Add__pt_key: ${{secrets.KEY}}
+        Ray_Tasks__List__1__Method: POST
+        Ray_Tasks__List__1__Content__Type: FormUrlEncodedContent
+        Ray_Tasks__List__1__Content__FormUrlEncodedContent__Dic__appid: ${{secrets.APPID}}
+        Ray_Tasks__List__1__Content__FormUrlEncodedContent__Dic__functionId: ${{secrets.FUNCTIONId}}
+        Ray_Tasks__List__1__Content__FormUrlEncodedContent__Dic__loginType: ${{secrets.LOGINTYPE}}
+        Ray_Tasks__List__1__Content__FormUrlEncodedContent__Dic__body: ${{secrets.BODY}}
+      run: |
+        cd ./src/Ray.AutoTask/bin/Publish/net5-dependent
+        dotnet Ray.AutoTask.dll -closeConsoleWhenEnd=1
