@@ -50,21 +50,21 @@ jobs:
         Ray_Serilog__WriteTo__4__Args__webHookUrl: ${{secrets.PUSHWEIXINAPI}}
         Ray_Serilog__WriteTo__6__Args__webHookUrl: ${{secrets.PUSHDINGAPI}}
         Ray_Tasks__List__0__Open: ${{secrets.ONEOPEN}}
-        Ray_Tasks__DefaultHeaders__Referer: ${{secrets.Referer}}
-        Ray_Tasks__DefaultHeaders__Origin: ${{secrets.Origin}}
-        Ray_Tasks__DefaultHeaders__Sec_Fetch_Mode: ${{secrets.Sec_Fetch_Mode}}
-        Ray_Tasks__DefaultHeaders__Sec-Fetch-Site: ${{secrets.Sec-Fetch-Site}}
-        Ray_Tasks__DefaultHeaders__Host: ${{secrets.Host}}
+        Ray_Tasks__DefaultHeaders__Referer: ${{secrets.REFERER}}
+        Ray_Tasks__DefaultHeaders__Origin: ${{secrets.ORIGIN}}
+        Ray_Tasks__DefaultHeaders__Sec-Fetch-Mode: ${{secrets.SECFETCHMODE}}
+        Ray_Tasks__DefaultHeaders__Sec-Fetch-Site: ${{secrets.SECFETCHSITE}}
+        Ray_Tasks__DefaultHeaders__Host: ${{secrets.HOST}}
         Ray_Tasks__List__1__Name: 签到
         Ray_Tasks__List__1__Open: ${{secrets.TWOOPEN}}
         Ray_Tasks__List__1__MapToClient: SignInTask
-        Ray_Tasks__List__1__Api: ${{secrets.Api}}
+        Ray_Tasks__List__1__Api: ${{secrets.API}}
         Ray_Tasks__List__1__Cookies__Add__pt_pin: ${{secrets.PIN}}
         Ray_Tasks__List__1__Cookies__Add__pt_key: ${{secrets.KEY}}
         Ray_Tasks__List__1__Method: POST
         Ray_Tasks__List__1__Content__Type: FormUrlEncodedContent
         Ray_Tasks__List__1__Content__FormUrlEncodedContent__Dic__appid: ${{secrets.APPID}}
-        Ray_Tasks__List__1__Content__FormUrlEncodedContent__Dic__functionId: ${{secrets.FUNCTIONId}}
+        Ray_Tasks__List__1__Content__FormUrlEncodedContent__Dic__functionId: ${{secrets.FUNCTIONID}}
         Ray_Tasks__List__1__Content__FormUrlEncodedContent__Dic__loginType: ${{secrets.LOGINTYPE}}
         Ray_Tasks__List__1__Content__FormUrlEncodedContent__Dic__body: ${{secrets.BODY}}
       run: |

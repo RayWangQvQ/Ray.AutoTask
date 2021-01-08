@@ -47,6 +47,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D7D9F316-ABA2-43E7-A193-9A0AB484DC1F}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\daily-task.yml = .github\workflows\daily-task.yml
+		.github\workflows\liwo-daily-task.yml = .github\workflows\liwo-daily-task.yml
 	EndProjectSection
 EndProject
 Global
