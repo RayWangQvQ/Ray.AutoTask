@@ -33,6 +33,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ray.AutoTask", "src\Ray.Aut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ray.AutoTask.Test", "test\Ray.AutoTask.Test\Ray.AutoTask.Test.csproj", "{E28EE87F-9F2C-4AF6-B41A-9E482BADD069}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{63AA4431-77D7-4407-A475-C36DE76AB94B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		clean.cmd = clean.cmd
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{7E3DEB7B-DA19-403E-9867-427E365FD8B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D7D9F316-ABA2-43E7-A193-9A0AB484DC1F}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\daily-task.yml = .github\workflows\daily-task.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +113,8 @@ Global
 		{F87DE6EC-3EC5-4DD6-8F69-E9D80038F0ED} = {5E1B9958-46CA-47DE-8F50-7E8E51E93BA5}
 		{E1C5C5C2-A970-4224-A92E-B155BBF935B1} = {A821723E-0102-469E-AE65-E13B10D4A038}
 		{E28EE87F-9F2C-4AF6-B41A-9E482BADD069} = {9AC58E15-7A31-4736-B60B-B60BD5E4E99F}
+		{7E3DEB7B-DA19-403E-9867-427E365FD8B4} = {63AA4431-77D7-4407-A475-C36DE76AB94B}
+		{D7D9F316-ABA2-43E7-A193-9A0AB484DC1F} = {7E3DEB7B-DA19-403E-9867-427E365FD8B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D65143B6-0FEE-4FC1-B69D-BFF71F6605E5}
