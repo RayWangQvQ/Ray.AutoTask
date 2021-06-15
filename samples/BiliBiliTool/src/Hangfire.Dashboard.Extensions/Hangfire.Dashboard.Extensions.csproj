@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Content\resx\RayStrings.zh.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire.Core" Version="1.7.23" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Content\resx\RayStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RayStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\RecurringJobExtensionsPage.generated.cs">
+      <DependentUpon>RecurringJobExtensionsPage.cshtml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Content\resx\RayStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RayStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Hangfire.Dashboard.Extensions.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Pages\RecurringJobExtensionsPage.cshtml">
+      <LastGenOutput>RecurringJobExtensionsPage.generated.cs</LastGenOutput>
+      <Generator>RazorGenerator</Generator>
+    </None>
+  </ItemGroup>
+
+</Project>
