@@ -61,11 +61,29 @@ namespace Hangfire.Dashboard.Extensions.Resources {
         }
         
         /// <summary>
-        ///   查找类似 Jobs Management 的本地化字符串。
+        ///   查找类似 Periodic Jobs 的本地化字符串。
         /// </summary>
-        public static string NavigationMenu_RecurringJobsEx {
+        public static string NavigationMenu_PeriodicJobs {
             get {
-                return ResourceManager.GetString("NavigationMenu_RecurringJobsEx", resourceCulture);
+                return ResourceManager.GetString("NavigationMenu_PeriodicJobs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Operation 的本地化字符串。
+        /// </summary>
+        public static string PeriodicJobsPage_Table_Operation {
+            get {
+                return ResourceManager.GetString("PeriodicJobsPage_Table_Operation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 State 的本地化字符串。
+        /// </summary>
+        public static string PeriodicJobsPage_Table_State {
+            get {
+                return ResourceManager.GetString("PeriodicJobsPage_Table_State", resourceCulture);
             }
         }
     }

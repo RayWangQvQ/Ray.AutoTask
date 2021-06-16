@@ -73,7 +73,7 @@ namespace Hangfire.Dashboard.Extensions
 
             NavigationMenu.Items.Add(page =>
             //new MenuItem(RecurringJobExtensionsPage.Title, page.Url.To(RecurringJobExtensionsPage.PageRoute))
-            new MenuItem(RayStrings.NavigationMenu_RecurringJobsEx, page.Url.To(RecurringJobExtensionsPage.PageRoute))
+            new MenuItem(RayStrings.NavigationMenu_PeriodicJobs, page.Url.To(RecurringJobExtensionsPage.PageRoute))
             {
                 Active = page.RequestPath.StartsWith(RecurringJobExtensionsPage.PageRoute),
                 Metric = DashboardMetrics.RecurringJobCount

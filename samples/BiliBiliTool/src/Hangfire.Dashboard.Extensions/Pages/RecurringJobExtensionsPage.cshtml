@@ -12,11 +12,14 @@
 @using Hangfire.Storage
 @using System.Reflection;
 @using Cronos;
-@using Hangfire.Dashboard.Extensions.Extensions;
+@using Hangfire.Dashboard.Extensions.Models;
+@using Hangfire.Dashboard.Extensions;
+@using Hangfire.Dashboard.Extensions.Resources;
 @inherits RazorPage
 @{
     Layout = new LayoutPage(Strings.RecurringJobsPage_Title);
-    List<RecurringJobDto> recurringJobs;
+    //List<RecurringJobDto> recurringJobs = new List<RecurringJobDto>();
+    List<PeriodicJobModel> periodicJobs = new List<PeriodicJobModel>();
 
     int from, perPage;
 
@@ -30,41 +33,14 @@
         var storageConnection = connection as JobStorageConnection;
         if (storageConnection != null)
         {
-            //pager = new Pager(from, perPage, storageConnection.GetRecurringJobCount());
-            recurringJobs = storageConnection.GetRecurringJobs(pager.FromRecord, pager.FromRecord + pager.RecordsPerPage - 1);
-            var recurringJob = storageConnection.GetRecurringJobs();
-            var periodicJob = new List<PeriodicJobModel>();
-
-            if (recurringJob.Count > 0)
-            {
-                recurringJob.ForEach((x) =>
-                {
-                    periodicJob.Add(new PeriodicJobModel
-                    {
-                        Id = x.Id,
-                        Cron = x.Cron,
-                        CreatedAt = x.CreatedAt.HasValue ? x.CreatedAt.Value.ConvertTimeZone(x.TimeZoneId) : new DateTime(),
-                        Error = x.Error,
-                        LastExecution = x.LastExecution.HasValue ? x.LastExecution.Value.ConvertTimeZone(x.TimeZoneId).ToString("G") : "N/A",
-                        Method = x.Job.Method.Name,
-                        JobState = "Running",
-                        Class = x.Job.Type.Name,
-                        Queue = x.Queue,
-                        LastJobId = x.LastJobId,
-                        LastJobState = x.LastJobState,
-                        NextExecution = x.NextExecution.HasValue ? x.NextExecution.Value.ConvertTimeZone(x.TimeZoneId).ToString("G") : "N/A",
-                        Removed = x.Removed,
-                        TimeZoneId = x.TimeZoneId
-                    });
-                });
-            }
-
-            //Add job was stopped:
-            periodicJob.AddRange(PeriodicJobAgent.GetStoppedPeriodicJobs());
+            List<PeriodicJobModel> running = PeriodicJobAgent.GetPeriodicJobs(JobState.Running);
+            List<PeriodicJobModel> stoped = PeriodicJobAgent.GetPeriodicJobs(JobState.Stoped);
+            periodicJobs.AddRange(running);
+            periodicJobs.AddRange(stoped);
         }
         else
         {
-            recurringJobs = connection.GetRecurringJobs();
+            var recurringJobs = connection.GetRecurringJobs();
         }
     }
 }
@@ -72,7 +48,7 @@
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">@Strings.RecurringJobsPage_Title</h1>
-        @if (recurringJobs.Count == 0)
+        @if (periodicJobs.Count == 0)
         {
             <div class="alert alert-info">
                 @Strings.RecurringJobsPage_NoJobs
@@ -85,9 +61,9 @@
                     @if (!IsReadOnly)
                     {
                         <button class="js-jobs-list-command btn btn-sm btn-primary"
-                        data-url="@Url.To("/recurring/trigger")"
-                        data-loading-text="@Strings.RecurringJobsPage_Triggering"
-                        disabled="disabled">
+                                data-url="@Url.To("/recurring/trigger")"
+                                data-loading-text="@Strings.RecurringJobsPage_Triggering"
+                                disabled="disabled">
                             <span class="glyphicon glyphicon-play-circle"></span>
                             @Strings.RecurringJobsPage_TriggerNow
                         </button>
@@ -95,10 +71,10 @@
                     @if (!IsReadOnly)
                     {
                         <button class="js-jobs-list-command btn btn-sm btn-default"
-                        data-url="@Url.To("/recurring/remove")"
-                        data-loading-text="@Strings.Common_Deleting"
-                        data-confirm="@Strings.Common_DeleteConfirm"
-                        disabled="disabled">
+                                data-url="@Url.To("/recurring/remove")"
+                                data-loading-text="@Strings.Common_Deleting"
+                                data-confirm="@Strings.Common_DeleteConfirm"
+                                disabled="disabled">
                             <span class="glyphicon glyphicon-remove"></span>
                             @Strings.Common_Delete
                         </button>
@@ -122,23 +98,28 @@
                                 <th>@Strings.Common_Id</th>
                                 <th class="min-width">@Strings.RecurringJobsPage_Table_Cron</th>
                                 <th>@Strings.RecurringJobsPage_Table_TimeZone</th>
+                                <th>@RayStrings.PeriodicJobsPage_Table_State</th>
                                 <th>@Strings.Common_Job</th>
                                 <th class="align-right min-width">@Strings.RecurringJobsPage_Table_NextExecution</th>
                                 <th class="align-right min-width">@Strings.RecurringJobsPage_Table_LastExecution</th>
                                 <th class="align-right min-width">@Strings.Common_Created</th>
+                                <th>@RayStrings.PeriodicJobsPage_Table_Operation</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var job in recurringJobs)
+                            @foreach (var job in periodicJobs)
                             {
-                                <tr class="js-jobs-list-row hover">
+                                <tr class="js-jobs-list-rows">
+                                    @*复选框*@
                                     @if (!IsReadOnly)
                                     {
                                         <td rowspan="@(job.Error != null ? "2" : "1")">
                                             <input type="checkbox" class="js-jobs-list-checkbox" name="jobs[]" value="@job.Id" />
                                         </td>
                                     }
+                                    @*编号*@
                                     <td class="word-break width-15">@job.Id</td>
+                                    @*Cron*@
                                     <td style="min-width: 125px" class="min-width">
                                         @* ReSharper disable once EmptyGeneralCatchClause *@
                                         @{
@@ -166,13 +147,6 @@
                                                 if (cronDescription == null)
                                                 {
 #if FEATURE_CRONDESCRIPTOR
-                                                        try
-                                                        {
-                                                        cronDescription = CronExpressionDescriptor.ExpressionDescriptor.GetDescription(job.Cron);
-                                                        }
-                                                        catch (FormatException)
-                                                        {
-                                                        }
 #endif
                                                 }
                                             }
@@ -193,6 +167,7 @@
                                             <code class="cron-badge">@job.Cron</code>
                                         }
                                     </td>
+                                    @*时区*@
                                     <td>
                                         @if (!String.IsNullOrWhiteSpace(job.TimeZoneId))
                                         {
@@ -223,6 +198,18 @@
                                             @: UTC
                                         }
                                     </td>
+                                    @*状态*@
+                                    <td>
+                                        @if (job.JobState == "Running")
+                                        {
+                                            <span class="label label-success">@job.JobState</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">@job.JobState</span>
+                                        }
+                                    </td>
+                                    @*作业*@
                                     <td class="word-break width-30">
                                         @if (job.Job != null)
                                         {
@@ -241,6 +228,7 @@
                                             <em>@Strings.Common_NotAvailable</em>
                                         }
                                     </td>
+                                    @*下一次执行时间*@
                                     <td class="align-right min-width">
                                         @if (!job.NextExecution.HasValue)
                                         {
@@ -263,6 +251,7 @@
                                             @Html.RelativeTime(job.NextExecution.Value)
                                         }
                                     </td>
+                                    @*最后一次执行*@
                                     <td class="align-right min-width">
                                         @if (job.LastExecution != null)
                                         {
@@ -286,6 +275,7 @@
                                             <em>@Strings.Common_NotAvailable</em>
                                         }
                                     </td>
+                                    @*创建时间*@
                                     <td class="align-right min-width">
                                         @if (job.CreatedAt != null)
                                         {
@@ -296,16 +286,22 @@
                                             <em>N/A</em>
                                         }
                                     </td>
+                                    <td style="min-width: 100px" class="align-right width-30">
+                                        <button>Edit</button>
+                                        <button>Stop</button>
+                                        <button>Run</button>
+                                    </td>
                                     @if (job.Error != null)
                                     {
+
                                     <tr>
                                         <td colspan="@(IsReadOnly ? "6" : "7")" class="failed-job-details">
                                             <pre class="stack-trace"><code>@Html.StackTrace(job.Error)</code></pre>
                                         </td>
                                     </tr>
-                                    }
-                                </tr>
-                            }
+                                }
+                                    </tr>
+                                }
                         </tbody>
                     </table>
                 </div>

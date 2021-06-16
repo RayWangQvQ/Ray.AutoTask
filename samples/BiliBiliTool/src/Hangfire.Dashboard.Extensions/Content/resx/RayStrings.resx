@@ -117,7 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NavigationMenu_RecurringJobsEx" xml:space="preserve">
-    <value>Jobs Management</value>
+  <data name="NavigationMenu_PeriodicJobs" xml:space="preserve">
+    <value>Periodic Jobs</value>
+  </data>
+  <data name="PeriodicJobsPage_Table_Operation" xml:space="preserve">
+    <value>Operation</value>
+  </data>
+  <data name="PeriodicJobsPage_Table_State" xml:space="preserve">
+    <value>State</value>
   </data>
 </root>

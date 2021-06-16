@@ -11,7 +11,7 @@ namespace Hangfire.Dashboard.Extensions.Pages
 {
     partial class RecurringJobExtensionsPage : IExtensionsPageInfo
     {
-        public static string Title => RayStrings.NavigationMenu_RecurringJobsEx;
+        public static string Title => RayStrings.NavigationMenu_PeriodicJobs;
 
         public static string PageRoute => "/RecurringJobManage";
 

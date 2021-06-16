@@ -19,7 +19,9 @@ namespace Hangfire.Dashboard.Extensions.Pages
     using Cronos;
     using Hangfire;
     using Hangfire.Dashboard;
-    using Hangfire.Dashboard.Extensions.Extensions;
+    using Hangfire.Dashboard.Extensions;
+    using Hangfire.Dashboard.Extensions.Models;
+    using Hangfire.Dashboard.Extensions.Resources;
     using Hangfire.Dashboard.Pages;
     using Hangfire.Dashboard.Resources;
     using Hangfire.States;
@@ -49,9 +51,12 @@ WriteLiteral("\r\n");
 
 
 
+
+
   
     Layout = new LayoutPage(Strings.RecurringJobsPage_Title);
-    List<RecurringJobDto> recurringJobs;
+    //List<RecurringJobDto> recurringJobs = new List<RecurringJobDto>();
+    List<PeriodicJobModel> periodicJobs = new List<PeriodicJobModel>();
 
     int from, perPage;
 
@@ -65,41 +70,14 @@ WriteLiteral("\r\n");
         var storageConnection = connection as JobStorageConnection;
         if (storageConnection != null)
         {
-            //pager = new Pager(from, perPage, storageConnection.GetRecurringJobCount());
-            recurringJobs = storageConnection.GetRecurringJobs(pager.FromRecord, pager.FromRecord + pager.RecordsPerPage - 1);
-            var recurringJob = storageConnection.GetRecurringJobs();
-            var periodicJob = new List<PeriodicJobModel>();
-
-            if (recurringJob.Count > 0)
-            {
-                recurringJob.ForEach((x) =>
-                {
-                    periodicJob.Add(new PeriodicJobModel
-                    {
-                        Id = x.Id,
-                        Cron = x.Cron,
-                        CreatedAt = x.CreatedAt.HasValue ? x.CreatedAt.Value.ConvertTimeZone(x.TimeZoneId) : new DateTime(),
-                        Error = x.Error,
-                        LastExecution = x.LastExecution.HasValue ? x.LastExecution.Value.ConvertTimeZone(x.TimeZoneId).ToString("G") : "N/A",
-                        Method = x.Job.Method.Name,
-                        JobState = "Running",
-                        Class = x.Job.Type.Name,
-                        Queue = x.Queue,
-                        LastJobId = x.LastJobId,
-                        LastJobState = x.LastJobState,
-                        NextExecution = x.NextExecution.HasValue ? x.NextExecution.Value.ConvertTimeZone(x.TimeZoneId).ToString("G") : "N/A",
-                        Removed = x.Removed,
-                        TimeZoneId = x.TimeZoneId
-                    });
-                });
-            }
-
-            //Add job was stopped:
-            periodicJob.AddRange(PeriodicJobAgent.GetStoppedPeriodicJobs());
+            List<PeriodicJobModel> running = PeriodicJobAgent.GetPeriodicJobs(JobState.Running);
+            List<PeriodicJobModel> stoped = PeriodicJobAgent.GetPeriodicJobs(JobState.Stoped);
+            periodicJobs.AddRange(running);
+            periodicJobs.AddRange(stoped);
         }
         else
         {
-            recurringJobs = connection.GetRecurringJobs();
+            var recurringJobs = connection.GetRecurringJobs();
         }
     }
 
@@ -113,7 +91,7 @@ WriteLiteral("\r\n<div class=\"row\">\r\n    <div class=\"col-md-12\">\r\n      
 WriteLiteral("</h1>\r\n");
 
 
-         if (recurringJobs.Count == 0)
+         if (periodicJobs.Count == 0)
         {
 
 WriteLiteral("            <div class=\"alert alert-info\">\r\n                ");
@@ -136,18 +114,19 @@ WriteLiteral("            <div class=\"js-jobs-list\">\r\n                <div c
                     {
 
 WriteLiteral("                        <button class=\"js-jobs-list-command btn btn-sm btn-primar" +
-"y\"\r\n                        data-url=\"");
+"y\"\r\n                                data-url=\"");
 
 
-                             Write(Url.To("/recurring/trigger"));
+                                     Write(Url.To("/recurring/trigger"));
 
-WriteLiteral("\"\r\n                        data-loading-text=\"");
+WriteLiteral("\"\r\n                                data-loading-text=\"");
 
 
-                                      Write(Strings.RecurringJobsPage_Triggering);
+                                              Write(Strings.RecurringJobsPage_Triggering);
 
-WriteLiteral("\"\r\n                        disabled=\"disabled\">\r\n                            <spa" +
-"n class=\"glyphicon glyphicon-play-circle\"></span>\r\n                            ");
+WriteLiteral("\"\r\n                                disabled=\"disabled\">\r\n                        " +
+"    <span class=\"glyphicon glyphicon-play-circle\"></span>\r\n                     " +
+"       ");
 
 
                        Write(Strings.RecurringJobsPage_TriggerNow);
@@ -162,23 +141,24 @@ WriteLiteral("\r\n                        </button>\r\n");
                     {
 
 WriteLiteral("                        <button class=\"js-jobs-list-command btn btn-sm btn-defaul" +
-"t\"\r\n                        data-url=\"");
+"t\"\r\n                                data-url=\"");
 
 
-                             Write(Url.To("/recurring/remove"));
+                                     Write(Url.To("/recurring/remove"));
 
-WriteLiteral("\"\r\n                        data-loading-text=\"");
-
-
-                                      Write(Strings.Common_Deleting);
-
-WriteLiteral("\"\r\n                        data-confirm=\"");
+WriteLiteral("\"\r\n                                data-loading-text=\"");
 
 
-                                 Write(Strings.Common_DeleteConfirm);
+                                              Write(Strings.Common_Deleting);
 
-WriteLiteral("\"\r\n                        disabled=\"disabled\">\r\n                            <spa" +
-"n class=\"glyphicon glyphicon-remove\"></span>\r\n                            ");
+WriteLiteral("\"\r\n                                data-confirm=\"");
+
+
+                                         Write(Strings.Common_DeleteConfirm);
+
+WriteLiteral("\"\r\n                                disabled=\"disabled\">\r\n                        " +
+"    <span class=\"glyphicon glyphicon-remove\"></span>\r\n                          " +
+"  ");
 
 
                        Write(Strings.Common_Delete);
@@ -237,6 +217,11 @@ WriteLiteral("</th>\r\n                                <th>");
 WriteLiteral("</th>\r\n                                <th>");
 
 
+                               Write(RayStrings.PeriodicJobsPage_Table_State);
+
+WriteLiteral("</th>\r\n                                <th>");
+
+
                                Write(Strings.Common_Job);
 
 WriteLiteral("</th>\r\n                                <th class=\"align-right min-width\">");
@@ -254,14 +239,24 @@ WriteLiteral("</th>\r\n                                <th class=\"align-right m
 
                                                              Write(Strings.Common_Created);
 
+WriteLiteral("</th>\r\n                                <th>");
+
+
+                               Write(RayStrings.PeriodicJobsPage_Table_Operation);
+
 WriteLiteral("</th>\r\n                            </tr>\r\n                        </thead>\r\n     " +
 "                   <tbody>\r\n");
 
 
-                             foreach (var job in recurringJobs)
+                             foreach (var job in periodicJobs)
                             {
 
-WriteLiteral("                                <tr class=\"js-jobs-list-row hover\">\r\n");
+WriteLiteral("                                <tr class=\"js-jobs-list-rows\">\r\n                 " +
+"                   ");
+
+
+
+WriteLiteral("\r\n");
 
 
                                      if (!IsReadOnly)
@@ -282,14 +277,21 @@ WriteLiteral("\" />\r\n                                        </td>\r\n");
 
 
                                     }
+                                    
+
+                                          
 
 WriteLiteral("                                    <td class=\"word-break width-15\">");
 
 
                                                                Write(job.Id);
 
-WriteLiteral("</td>\r\n                                    <td style=\"min-width: 125px\" class=\"mi" +
-"n-width\">\r\n                                        ");
+WriteLiteral("</td>\r\n                                    ");
+
+
+
+WriteLiteral("\r\n                                    <td style=\"min-width: 125px\" class=\"min-wid" +
+"th\">\r\n                                        ");
 
 
 
@@ -321,13 +323,6 @@ WriteLiteral("\r\n");
                                                 if (cronDescription == null)
                                                 {
 #if FEATURE_CRONDESCRIPTOR
-                                                        try
-                                                        {
-                                                        cronDescription = CronExpressionDescriptor.ExpressionDescriptor.GetDescription(job.Cron);
-                                                        }
-                                                        catch (FormatException)
-                                                        {
-                                                        }
 #endif
                                                 }
                                             }
@@ -378,8 +373,11 @@ WriteLiteral("</code>\r\n");
 
                                         }
 
-WriteLiteral("                                    </td>\r\n                                    <t" +
-"d>\r\n");
+WriteLiteral("                                    </td>\r\n                                    ");
+
+
+
+WriteLiteral("\r\n                                    <td>\r\n");
 
 
                                          if (!String.IsNullOrWhiteSpace(job.TimeZoneId))
@@ -440,8 +438,43 @@ WriteLiteral(" UTC\r\n");
 
                                         }
 
-WriteLiteral("                                    </td>\r\n                                    <t" +
-"d class=\"word-break width-30\">\r\n");
+WriteLiteral("                                    </td>\r\n                                    ");
+
+
+
+WriteLiteral("\r\n                                    <td>\r\n");
+
+
+                                         if (job.JobState == "Running")
+                                        {
+
+WriteLiteral("                                            <span class=\"label label-success\">");
+
+
+                                                                         Write(job.JobState);
+
+WriteLiteral("</span>\r\n");
+
+
+                                        }
+                                        else
+                                        {
+
+WriteLiteral("                                            <span class=\"label label-danger\">");
+
+
+                                                                        Write(job.JobState);
+
+WriteLiteral("</span>\r\n");
+
+
+                                        }
+
+WriteLiteral("                                    </td>\r\n                                    ");
+
+
+
+WriteLiteral("\r\n                                    <td class=\"word-break width-30\">\r\n");
 
 
                                          if (job.Job != null)
@@ -495,8 +528,11 @@ WriteLiteral("</em>\r\n");
 
                                         }
 
-WriteLiteral("                                    </td>\r\n                                    <t" +
-"d class=\"align-right min-width\">\r\n");
+WriteLiteral("                                    </td>\r\n                                    ");
+
+
+
+WriteLiteral("\r\n                                    <td class=\"align-right min-width\">\r\n");
 
 
                                          if (!job.NextExecution.HasValue)
@@ -554,8 +590,11 @@ WriteLiteral("</span>\r\n");
                                                                                        
                                         }
 
-WriteLiteral("                                    </td>\r\n                                    <t" +
-"d class=\"align-right min-width\">\r\n");
+WriteLiteral("                                    </td>\r\n                                    ");
+
+
+
+WriteLiteral("\r\n                                    <td class=\"align-right min-width\">\r\n");
 
 
                                          if (job.LastExecution != null)
@@ -616,8 +655,11 @@ WriteLiteral("</em>\r\n");
 
                                         }
 
-WriteLiteral("                                    </td>\r\n                                    <t" +
-"d class=\"align-right min-width\">\r\n");
+WriteLiteral("                                    </td>\r\n                                    ");
+
+
+
+WriteLiteral("\r\n                                    <td class=\"align-right min-width\">\r\n");
 
 
                                          if (job.CreatedAt != null)
@@ -635,11 +677,18 @@ WriteLiteral("                                            <em>N/A</em>\r\n");
 
                                         }
 
-WriteLiteral("                                    </td>\r\n");
+WriteLiteral(@"                                    </td>
+                                    <td style=""min-width: 100px"" class=""align-right width-30"">
+                                        <button>Edit</button>
+                                        <button>Stop</button>
+                                        <button>Run</button>
+                                    </td>
+");
 
 
                                      if (job.Error != null)
                                     {
+
 
 WriteLiteral("                                    <tr>\r\n                                       " +
 " <td colspan=\"");
@@ -657,12 +706,12 @@ WriteLiteral("</code></pre>\r\n                                        </td>\r\n
 "                 </tr>\r\n");
 
 
-                                    }
+                                }
 
-WriteLiteral("                                </tr>\r\n");
+WriteLiteral("                                    </tr>\r\n");
 
 
-                            }
+                                }
 
 WriteLiteral("                        </tbody>\r\n                    </table>\r\n                <" +
 "/div>\r\n\r\n");
