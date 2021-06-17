@@ -63,19 +63,20 @@ namespace Hangfire.Dashboard.Extensions
         [PublicAPI]
         public static IGlobalConfiguration UseDashboardExtensions(this IGlobalConfiguration config)
         {
+            config.
             CreateManagmentJob();
             return config;
         }
 
         private static void CreateManagmentJob()
         {
-            DashboardRoutes.Routes.AddRazorPage(RecurringJobExtensionsPage.PageRoute, x => new RecurringJobExtensionsPage());
+            DashboardRoutes.Routes.AddRazorPage(PeriodicJobPage.PageRoute, x => new PeriodicJobPage());
 
             NavigationMenu.Items.Add(page =>
             //new MenuItem(RecurringJobExtensionsPage.Title, page.Url.To(RecurringJobExtensionsPage.PageRoute))
-            new MenuItem(RayStrings.NavigationMenu_PeriodicJobs, page.Url.To(RecurringJobExtensionsPage.PageRoute))
+            new MenuItem(RayStrings.NavigationMenu_PeriodicJobs, page.Url.To(PeriodicJobPage.PageRoute))
             {
-                Active = page.RequestPath.StartsWith(RecurringJobExtensionsPage.PageRoute),
+                Active = page.RequestPath.StartsWith(PeriodicJobPage.PageRoute),
                 Metric = DashboardMetrics.RecurringJobCount
             });
         }
