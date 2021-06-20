@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Hangfire.Annotations;
+using Hangfire.Dashboard.Extensions.Dispatchers;
 using Hangfire.Dashboard.Extensions.Pages;
 using Hangfire.Dashboard.Extensions.Resources;
 
@@ -63,7 +64,6 @@ namespace Hangfire.Dashboard.Extensions
         [PublicAPI]
         public static IGlobalConfiguration UseDashboardExtensions(this IGlobalConfiguration config)
         {
-            config.
             CreateManagmentJob();
             return config;
         }
@@ -79,6 +79,15 @@ namespace Hangfire.Dashboard.Extensions
                 Active = page.RequestPath.StartsWith(PeriodicJobPage.PageRoute),
                 Metric = DashboardMetrics.RecurringJobCount
             });
+
+            DashboardRoutes.Routes.AddBatchCommand("/periodic/remove", (context, jobId) =>
+            {
+                IRecurringJobManager manager = context.GetRecurringJobManager();
+                //todo:先编辑为开启，再删除
+            });
+
+            DashboardRoutes.Routes.Add("/RecurringJobManage/Stop", new PetiodicStopDispatcher());
+            DashboardRoutes.Routes.Add("/RecurringJobManage/Start", new PetiodicStartDispatcher());
         }
     }
 }

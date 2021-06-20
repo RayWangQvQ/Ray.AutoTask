@@ -6,7 +6,10 @@ using Hangfire;
 using Hangfire.Console;
 using Hangfire.Server;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Ray.BiliBiliTool.Application.Contracts;
+using Serilog;
 
 namespace Ray.BiliBiliTool.OpenApi.Extensions
 {
@@ -14,9 +17,11 @@ namespace Ray.BiliBiliTool.OpenApi.Extensions
     {
         public static IApplicationBuilder UseMyTasks(this IApplicationBuilder app, IBackgroundJobClient backgroundJobs)
         {
+            var logger = app.ApplicationServices.GetRequiredService<ILogger<Startup>>();
+
             app.UseHangfireDashboard();
 
-            backgroundJobs.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
+            backgroundJobs.Enqueue(() => Log.Information("Hello world from Hangfire!"));
             //backgroundJobs.Enqueue<ITestAppService>(t => t.DoTask());
             RecurringJob.AddOrUpdate<IDailyTaskAppService>(t => t.DoTask(), "5 13 * * *", TimeZoneInfo.Local, typeof(IDailyTaskAppService).Description().ToLower());
             RecurringJob.AddOrUpdate<ILiveLotteryTaskAppService>(t => t.DoTask(), "30 */2 * * *", TimeZoneInfo.Local, typeof(ILiveLotteryTaskAppService).Description().ToLower());

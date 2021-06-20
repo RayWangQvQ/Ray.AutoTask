@@ -107,7 +107,7 @@ WriteLiteral("                    <button class=\"js-jobs-list-command btn btn-s
 "                        data-url=\"");
 
 
-                             Write(Url.To("/recurring/remove"));
+                             Write(Url.To("/periodic/remove"));
 
 WriteLiteral("\"\r\n                        data-loading-text=\"");
 
@@ -643,7 +643,7 @@ WriteLiteral("                                </td>\r\n                         
 
 
 
-WriteLiteral("\r\n                                <td style=\"min-width:100px\" class=\"align-right\"" +
+WriteLiteral("\r\n                                <td style=\"min-width:200px\" class=\"align-right\"" +
 ">\r\n                                    <button class=\"btn btn-info btn-xs\">Edit<" +
 "/button>\r\n");
 
@@ -651,8 +651,26 @@ WriteLiteral("\r\n                                <td style=\"min-width:100px\" 
                                      if (job.JobStateEnum == JobState.Running)
                                     {
 
-WriteLiteral("                                        <button class=\"btn btn-danger btn-xs\">Sto" +
-"p</button>\r\n");
+WriteLiteral("                                        <button type=\"button\" class=\"js-period-jo" +
+"bs-list-command btn btn-warning btn-xs\"\r\n                                       " +
+" data-url=\"");
+
+
+                                             Write(Url.To($"/RecurringJobManage/Stop?jobId={job.Id}"));
+
+WriteLiteral("\">\r\n                                            Stop\r\n                           " +
+"             </button>\r\n");
+
+
+
+WriteLiteral("                                        <button class=\"js-period-jobs-list-comman" +
+"d btn btn-primary btn-xs\">\r\n                                            Excute\r\n" +
+"                                        </button>\r\n");
+
+
+
+WriteLiteral("                                        <button class=\"btn btn-danger btn-xs\">Del" +
+"ete</button>\r\n");
 
 
                                     }
@@ -661,8 +679,14 @@ WriteLiteral("                                        <button class=\"btn btn-da
                                      if (job.JobStateEnum == JobState.Stoped)
                                     {
 
-WriteLiteral("                                        <button class=\"btn btn-success btn-xs\">Ru" +
-"n</button>\r\n");
+WriteLiteral("                                        <button class=\"js-period-jobs-list-comman" +
+"d btn btn-success btn-xs\"\r\n                                        data-url=\"");
+
+
+                                             Write(Url.To($"/RecurringJobManage/Start?jobId={job.Id}"));
+
+WriteLiteral("\">\r\n                                            Start\r\n                          " +
+"              </button>\r\n");
 
 
                                     }
@@ -715,7 +739,36 @@ WriteLiteral("\r\n");
 
             }
 
-WriteLiteral("        </div>\r\n        }\r\n    </div>\r\n</div>\r\n");
+WriteLiteral("        </div>\r\n        }\r\n    </div>\r\n</div>\r\n\r\n");
+
+
+
+WriteLiteral(@"
+<script src=""js0""></script>
+
+<script>
+    $('.js-jobs-list').each(function () {
+        var container = this;
+
+        $(this).on('click', '.js-period-jobs-list-command', function (e) {
+            var $this = $(this);
+
+            $this.prop('disabled');
+            var loadingDelay = setTimeout(function () {
+                $this.button('loading');
+            }, 100);
+
+            $.post($this.data('url'), {}, function () {
+                clearTimeout(loadingDelay);
+                window.location.reload();
+            });
+
+            e.preventDefault();
+        });
+    })
+
+</script>
+");
 
 
         }

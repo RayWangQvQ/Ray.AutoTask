@@ -41,7 +41,7 @@
                 @if (!IsReadOnly)
                 {
                     <button class="js-jobs-list-command btn btn-sm btn-default"
-                        data-url="@Url.To("/recurring/remove")"
+                        data-url="@Url.To("/periodic/remove")"
                         data-loading-text="@Strings.Common_Deleting"
                         data-confirm="@Strings.Common_DeleteConfirm"
                         disabled="disabled">
@@ -257,15 +257,25 @@
                                     }
                                 </td>
                                 @*操作*@
-                                <td style="min-width:100px" class="align-right">
+                                <td style="min-width:200px" class="align-right">
                                     <button class="btn btn-info btn-xs">Edit</button>
                                     @if (job.JobStateEnum == JobState.Running)
                                     {
-                                        <button class="btn btn-danger btn-xs">Stop</button>
+                                        <button type="button" class="js-period-jobs-list-command btn btn-warning btn-xs"
+                                        data-url="@Url.To($"/RecurringJobManage/Stop?jobId={job.Id}")">
+                                            Stop
+                                        </button>
+                                        <button class="js-period-jobs-list-command btn btn-primary btn-xs">
+                                            Excute
+                                        </button>
+                                        <button class="btn btn-danger btn-xs">Delete</button>
                                     }
                                     @if (job.JobStateEnum == JobState.Stoped)
                                     {
-                                        <button class="btn btn-success btn-xs">Run</button>
+                                        <button class="js-period-jobs-list-command btn btn-success btn-xs"
+                                        data-url="@Url.To($"/RecurringJobManage/Start?jobId={job.Id}")">
+                                            Start
+                                        </button>
                                     }
                                 </td>
                                 @if (job.Error != null)
@@ -291,3 +301,29 @@
         }
     </div>
 </div>
+
+@*导入Hangfire包中内嵌的js资源文件（localhost:port/hangfire/js0）*@
+<script src="js0"></script>
+
+<script>
+    $('.js-jobs-list').each(function () {
+        var container = this;
+
+        $(this).on('click', '.js-period-jobs-list-command', function (e) {
+            var $this = $(this);
+
+            $this.prop('disabled');
+            var loadingDelay = setTimeout(function () {
+                $this.button('loading');
+            }, 100);
+
+            $.post($this.data('url'), {}, function () {
+                clearTimeout(loadingDelay);
+                window.location.reload();
+            });
+
+            e.preventDefault();
+        });
+    })
+
+</script>
