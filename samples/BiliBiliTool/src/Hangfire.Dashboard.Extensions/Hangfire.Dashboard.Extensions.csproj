@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Content\js\hangfire-ext.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Content\js\hangfire-ext.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Content\resx\RayStrings.zh.resx" />
   </ItemGroup>
 
