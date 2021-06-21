@@ -17,27 +17,67 @@ namespace Hangfire.Dashboard.Extensions.Models
     public class PeriodicJobModel
     {
         public string Id { get; set; }
+
+        /// <summary>
+        /// Cron表达式
+        /// </summary>
         public string Cron { get; set; }
+
+        /// <summary>
+        /// 所属队列
+        /// </summary>
         public string Queue { get; set; }
 
+        /// <summary>
+        /// Job
+        /// </summary>
         public Hangfire.Common.Job Job { get; set; }
         public string Class => Job.Method.Name;
         public string Method => Job.Type.Name;
 
         public JobLoadException LoadException { get; set; }
 
+        /// <summary>
+        /// 任务开启状态
+        /// </summary>
         public string JobState => JobStateEnum.ToString();
         public JobState JobStateEnum { get; set; }
 
+        /// <summary>
+        /// 最后一次运行时间
+        /// </summary>
         public DateTime? LastExecution { get; set; }
+        /// <summary>
+        /// 下一次运行时间
+        /// </summary>
         public DateTime? NextExecution { get; set; }
+        /// <summary>
+        /// 下一次运行的JobId
+        /// </summary>
         public string LastJobId { get; set; }
+        /// <summary>
+        /// 下一次运行状态
+        /// </summary>
         public string LastJobState { get; set; }
 
+        /// <summary>
+        /// 创建时间
+        /// </summary>
         public DateTime? CreatedAt { get; set; }
+
+        /// <summary>
+        /// 是否被移除
+        /// </summary>
         public bool Removed { get; set; }
+
+        /// <summary>
+        /// 时区Id
+        /// </summary>
         public string TimeZoneId { get; set; }
 
+        /// <summary>
+        /// 错误信息
+        /// </summary>
         public string Error { get; set; }
         public int RetryAttempt { get; set; }
 
@@ -57,8 +97,38 @@ namespace Hangfire.Dashboard.Extensions.Models
         /// </summary>
         public const string tagStopJob = "recurring-jobs-stop";
 
+
+
+        public Tuple<string, Exception> GetTimeZoneDisplayInfo(Hangfire.DashboardOptions dashboardOptions)
+        {
+            string displayName = "";
+            Exception exception = null;
+
+            if (!String.IsNullOrWhiteSpace(this.TimeZoneId))
+            {
+                try
+                {
+                    var resolver = dashboardOptions.TimeZoneResolver ?? new DefaultTimeZoneResolver();
+                    displayName = resolver.GetTimeZoneById(this.TimeZoneId).DisplayName;
+                }
+                catch (Exception ex)
+                {
+                    displayName = null;
+                    exception = ex;
+                }
+                return Tuple.Create<string, Exception>(displayName, exception);
+            }
+            else
+            {
+                return Tuple.Create<string, Exception>("UTC", null);
+            }
+        }
+
+
         public static PeriodicJobModel Create(string jobId, IStorageConnection connection, JobState jobState)
         {
+
+
             var dto = new PeriodicJobModel();
 
             Dictionary<string, string> dataJob = connection.GetAllEntriesFromHash($"{tagRecurringJob}:{jobId}");

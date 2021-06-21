@@ -15,7 +15,9 @@
 @using Hangfire.Dashboard.Extensions.Models;
 @using Hangfire.Dashboard.Extensions;
 @using Hangfire.Dashboard.Extensions.Resources;
+
 @inherits RazorPage
+
 @{
     Init();
 }
@@ -139,33 +141,15 @@
                                 </td>
                                 @*时区*@
                                 <td>
-                                    @if (!String.IsNullOrWhiteSpace(job.TimeZoneId))
-                                    {
-                                        string displayName;
-                                        Exception exception = null;
-
-                                        try
-                                        {
-                                            var resolver = DashboardOptions.TimeZoneResolver ?? new DefaultTimeZoneResolver();
-                                            displayName = resolver.GetTimeZoneById(job.TimeZoneId).DisplayName;
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            displayName = null;
-                                            exception = ex;
-                                        }
-
-                                        <span title="@displayName" data-container="body">
+                                    @{
+                                        var timeZoneDisplayInfo = job.GetTimeZoneDisplayInfo(this.DashboardOptions);
+                                        <span title="@timeZoneDisplayInfo.Item1" data-container="body">
                                             @job.TimeZoneId
-                                            @if (exception != null)
+                                            @if (timeZoneDisplayInfo.Item2 != null)
                                             {
-                                                <span class="glyphicon glyphicon-exclamation-sign" title="@exception.Message"></span>
+                                                <span class="glyphicon glyphicon-exclamation-sign" title="@timeZoneDisplayInfo.Item2.Message"></span>
                                             }
                                         </span>
-                                    }
-                                    else
-                                    {
-                                        @: UTC
                                     }
                                 </td>
                                 @*状态*@

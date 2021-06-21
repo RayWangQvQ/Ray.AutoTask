@@ -51,6 +51,10 @@ WriteLiteral("\r\n");
 
 
 
+WriteLiteral("\r\n");
+
+
+WriteLiteral("\r\n");
 
 
   
@@ -342,27 +346,13 @@ WriteLiteral("                                </td>\r\n                         
 WriteLiteral("\r\n                                <td>\r\n");
 
 
-                                     if (!String.IsNullOrWhiteSpace(job.TimeZoneId))
-                                    {
-                                        string displayName;
-                                        Exception exception = null;
-
-                                        try
-                                        {
-                                            var resolver = DashboardOptions.TimeZoneResolver ?? new DefaultTimeZoneResolver();
-                                            displayName = resolver.GetTimeZoneById(job.TimeZoneId).DisplayName;
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            displayName = null;
-                                            exception = ex;
-                                        }
-
+                                      
+                                        var timeZoneDisplayInfo = job.GetTimeZoneDisplayInfo(this.DashboardOptions);
 
 WriteLiteral("                                        <span title=\"");
 
 
-                                                Write(displayName);
+                                                Write(timeZoneDisplayInfo.Item1);
 
 WriteLiteral("\" data-container=\"body\">\r\n                                            ");
 
@@ -372,14 +362,14 @@ WriteLiteral("\" data-container=\"body\">\r\n                                   
 WriteLiteral("\r\n");
 
 
-                                             if (exception != null)
+                                             if (timeZoneDisplayInfo.Item2 != null)
                                             {
 
 WriteLiteral("                                                <span class=\"glyphicon glyphicon-" +
 "exclamation-sign\" title=\"");
 
 
-                                                                                                     Write(exception.Message);
+                                                                                                     Write(timeZoneDisplayInfo.Item2.Message);
 
 WriteLiteral("\"></span>\r\n");
 
@@ -389,16 +379,7 @@ WriteLiteral("\"></span>\r\n");
 WriteLiteral("                                        </span>\r\n");
 
 
-                                    }
-                                    else
-                                    {
-
-WriteLiteral("                                        ");
-
-WriteLiteral(" UTC\r\n");
-
-
-                                    }
+                                    
 
 WriteLiteral("                                </td>\r\n                                ");
 
