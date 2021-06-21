@@ -79,18 +79,18 @@ WriteLiteral("\r\n");
                 {
 
 WriteLiteral("                    <button class=\"js-jobs-list-command btn btn-sm btn-primary\"\r\n" +
-"                        data-url=\"");
+"                            data-url=\"");
 
 
-                             Write(Url.To("/recurring/trigger"));
+                                 Write(Url.To("/recurring/trigger"));
 
-WriteLiteral("\"\r\n                        data-loading-text=\"");
+WriteLiteral("\"\r\n                            data-loading-text=\"");
 
 
-                                      Write(Strings.RecurringJobsPage_Triggering);
+                                          Write(Strings.RecurringJobsPage_Triggering);
 
-WriteLiteral("\"\r\n                        disabled=\"disabled\">\r\n                        <span cl" +
-"ass=\"glyphicon glyphicon-play-circle\"></span>\r\n                        ");
+WriteLiteral("\"\r\n                            disabled=\"disabled\">\r\n                        <spa" +
+"n class=\"glyphicon glyphicon-play-circle\"></span>\r\n                        ");
 
 
                    Write(Strings.RecurringJobsPage_TriggerNow);
@@ -108,23 +108,23 @@ WriteLiteral("\r\n                    </button>\r\n");
                 {
 
 WriteLiteral("                    <button class=\"js-jobs-list-command btn btn-sm btn-default\"\r\n" +
-"                        data-url=\"");
+"                            data-url=\"");
 
 
-                             Write(Url.To("/periodic/remove"));
+                                 Write(Url.To("/periodic/remove"));
 
-WriteLiteral("\"\r\n                        data-loading-text=\"");
-
-
-                                      Write(Strings.Common_Deleting);
-
-WriteLiteral("\"\r\n                        data-confirm=\"");
+WriteLiteral("\"\r\n                            data-loading-text=\"");
 
 
-                                 Write(Strings.Common_DeleteConfirm);
+                                          Write(Strings.Common_Deleting);
 
-WriteLiteral("\"\r\n                        disabled=\"disabled\">\r\n                        <span cl" +
-"ass=\"glyphicon glyphicon-remove\"></span>\r\n                        ");
+WriteLiteral("\"\r\n                            data-confirm=\"");
+
+
+                                     Write(Strings.Common_DeleteConfirm);
+
+WriteLiteral("\"\r\n                            disabled=\"disabled\">\r\n                        <spa" +
+"n class=\"glyphicon glyphicon-remove\"></span>\r\n                        ");
 
 
                    Write(Strings.Common_Delete);
@@ -634,10 +634,10 @@ WriteLiteral("\r\n                                <td style=\"min-width:200px\" 
 
 WriteLiteral("                                        <button type=\"button\" class=\"js-period-jo" +
 "bs-list-command btn btn-warning btn-xs\"\r\n                                       " +
-" data-url=\"");
+"         data-url=\"");
 
 
-                                             Write(Url.To($"/RecurringJobManage/Stop?jobId={job.Id}"));
+                                                     Write(Url.To($"/RecurringJobManage/Stop?jobId={job.Id}"));
 
 WriteLiteral("\">\r\n                                            Stop\r\n                           " +
 "             </button>\r\n");
@@ -661,10 +661,11 @@ WriteLiteral("                                        <button class=\"btn btn-da
                                     {
 
 WriteLiteral("                                        <button class=\"js-period-jobs-list-comman" +
-"d btn btn-success btn-xs\"\r\n                                        data-url=\"");
+"d btn btn-success btn-xs\"\r\n                                                data-" +
+"url=\"");
 
 
-                                             Write(Url.To($"/RecurringJobManage/Start?jobId={job.Id}"));
+                                                     Write(Url.To($"/RecurringJobManage/Start?jobId={job.Id}"));
 
 WriteLiteral("\">\r\n                                            Start\r\n                          " +
 "              </button>\r\n");
@@ -695,12 +696,12 @@ WriteLiteral("</code></pre>\r\n                                    </td>\r\n    
 "         </tr>\r\n");
 
 
-                                }
+                            }
 
-WriteLiteral("                            </tr>\r\n");
+WriteLiteral("                                </tr>\r\n");
 
 
-                        }
+                            }
 
 WriteLiteral("                    </tbody>\r\n                </table>\r\n            </div>\r\n\r\n");
 
@@ -720,36 +721,17 @@ WriteLiteral("\r\n");
 
             }
 
-WriteLiteral("        </div>\r\n        }\r\n    </div>\r\n</div>\r\n\r\n");
+WriteLiteral("        </div>\r\n        }\r\n    </div>\r\n</div>\r\n\r\n<script src=\"");
 
 
+        Write(Url.To("/js0"));
 
-WriteLiteral(@"
-<script src=""js0""></script>
+WriteLiteral("\"></script>\r\n<script src=\"");
 
-<script>
-    $('.js-jobs-list').each(function () {
-        var container = this;
 
-        $(this).on('click', '.js-period-jobs-list-command', function (e) {
-            var $this = $(this);
+        Write(Url.To("/js-ext0"));
 
-            $this.prop('disabled');
-            var loadingDelay = setTimeout(function () {
-                $this.button('loading');
-            }, 100);
-
-            $.post($this.data('url'), {}, function () {
-                clearTimeout(loadingDelay);
-                window.location.reload();
-            });
-
-            e.preventDefault();
-        });
-    })
-
-</script>
-");
+WriteLiteral("\"></script>\r\n");
 
 
         }

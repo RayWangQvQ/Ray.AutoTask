@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Hangfire.Annotations;
 using Hangfire.Dashboard.Extensions.Dispatchers;
@@ -9,6 +10,11 @@ namespace Hangfire.Dashboard.Extensions
 {
     public static class ConfigurationExtensions
     {
+        private static readonly string[] Javascripts =
+        {
+            "hangfire-ext.js"
+        };
+
         /// <param name="includeReferences">If is true it will load all dlls references of the current project to find all jobs.</param>
         /// <param name="assemblies"></param>
         [PublicAPI]
@@ -80,14 +86,31 @@ namespace Hangfire.Dashboard.Extensions
                 Metric = DashboardMetrics.RecurringJobCount
             });
 
-            DashboardRoutes.Routes.AddBatchCommand("/periodic/remove", (context, jobId) =>
+            DashboardRoutes.Routes.AddBatchCommand($"/{PeriodicJobPage.PageRoute}/remove", (context, jobId) =>
             {
                 IRecurringJobManager manager = context.GetRecurringJobManager();
                 //todo:先编辑为开启，再删除
             });
 
-            DashboardRoutes.Routes.Add("/RecurringJobManage/Stop", new PetiodicStopDispatcher());
-            DashboardRoutes.Routes.Add("/RecurringJobManage/Start", new PetiodicStartDispatcher());
+
+            DashboardRoutes.Routes.Add($"/{PeriodicJobPage.PageRoute}/stop", new PetiodicStopDispatcher());
+            DashboardRoutes.Routes.Add($"/{PeriodicJobPage.PageRoute}/start", new PetiodicStartDispatcher());
+
+            DashboardRoutes.Routes.Add("/js-ext[0-9]+", new CombinedResourceDispatcher(
+                "application/javascript",
+                GetExecutingAssembly(),
+                GetContentFolderNamespace("js"),
+                Javascripts));
+        }
+
+        internal static string GetContentFolderNamespace(string contentFolder)
+        {
+            return $"{typeof(PeriodicJobAgent).Namespace}.Content.{contentFolder}";
+        }
+
+        private static Assembly GetExecutingAssembly()
+        {
+            return typeof(PeriodicJobAgent).GetTypeInfo().Assembly;
         }
     }
 }
