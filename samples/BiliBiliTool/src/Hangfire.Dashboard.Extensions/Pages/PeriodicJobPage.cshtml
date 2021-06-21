@@ -32,9 +32,9 @@
                 @if (!IsReadOnly)
                 {
                     <button class="js-jobs-list-command btn btn-sm btn-primary"
-                            data-url="@Url.To("/recurring/trigger")"
-                            data-loading-text="@Strings.RecurringJobsPage_Triggering"
-                            disabled="disabled">
+                        data-url="@Url.To("/recurring/trigger")"
+                        data-loading-text="@Strings.RecurringJobsPage_Triggering"
+                        disabled="disabled">
                         <span class="glyphicon glyphicon-play-circle"></span>
                         @Strings.RecurringJobsPage_TriggerNow
                     </button>
@@ -43,14 +43,15 @@
                 @if (!IsReadOnly)
                 {
                     <button class="js-jobs-list-command btn btn-sm btn-default"
-                            data-url="@Url.To("/periodic/remove")"
-                            data-loading-text="@Strings.Common_Deleting"
-                            data-confirm="@Strings.Common_DeleteConfirm"
-                            disabled="disabled">
+                        data-url="@Url.To("/periodic/remove")"
+                        data-loading-text="@Strings.Common_Deleting"
+                        data-confirm="@Strings.Common_DeleteConfirm"
+                        disabled="disabled">
                         <span class="glyphicon glyphicon-remove"></span>
                         @Strings.Common_Delete
                     </button>
                 }
+                @*分页*@
                 @if (pager != null)
                 {
                     @: @Html.PerPageSelector(pager)
@@ -70,10 +71,10 @@
                             <th>@Strings.Common_Id</th>
                             <th class="min-width">@Strings.RecurringJobsPage_Table_Cron</th>
                             <th>@Strings.RecurringJobsPage_Table_TimeZone</th>
-                            <th>@RayStrings.PeriodicJobsPage_Table_State</th>
                             <th>@Strings.Common_Job</th>
-                            <th class="align-right min-width">@Strings.RecurringJobsPage_Table_NextExecution</th>
+                            <th>@RayStrings.PeriodicJobsPage_Table_State</th>
                             <th class="align-right min-width">@Strings.RecurringJobsPage_Table_LastExecution</th>
+                            <th class="align-right min-width">@Strings.RecurringJobsPage_Table_NextExecution</th>
                             <th class="align-right min-width">@Strings.Common_Created</th>
                             <th class="align-right min-width">@RayStrings.PeriodicJobsPage_Table_Operation</th>
                         </tr>
@@ -93,41 +94,14 @@
                                 <td class="word-break width-15">@job.Id</td>
                                 @*Cron*@
                                 <td style="min-width: 125px" class="min-width">
-                                    @* ReSharper disable once EmptyGeneralCatchClause *@
                                     @{
-                                        string cronDescription = null;
-                                        bool cronError = false;
-
-                                        if (!String.IsNullOrEmpty(job.Cron))
-                                        {
-                                            try
-                                            {
-                                                //RecurringJobEntity.ParseCronExpression(job.Cron);
-                                                //通过反射调用
-                                                Assembly asm = Assembly.GetAssembly(typeof(Hangfire.RecurringJob));
-                                                MethodInfo? mf = asm?.GetType("Hangfire.RecurringJobEntity")
-                                                ?.GetMethod("ParseCronExpression", BindingFlags.NonPublic | BindingFlags.Static);
-                                                //CronExpression saf = (CronExpression)mf.Invoke(null, null);
-                                                mf?.Invoke(null, new[] { job.Cron });
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                cronDescription = ex.Message;
-                                                cronError = true;
-                                            }
-
-                                            if (cronDescription == null)
-                                            {
-#if FEATURE_CRONDESCRIPTOR
-#endif
-                                            }
-                                        }
+                                        var cronDisplay = job.GetCronDisplayInfo();
                                     }
 
-                                    @if (cronDescription != null)
+                                    @if (cronDisplay.Item2 != null)
                                     {
-                                        <code title="@cronDescription" class="cron-badge">
-                                            @if (cronError)
+                                        <code title="@cronDisplay.Item2" class="cron-badge">
+                                            @if (cronDisplay.Item1)
                                             {
                                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                             }
@@ -143,25 +117,14 @@
                                 <td>
                                     @{
                                         var timeZoneDisplayInfo = job.GetTimeZoneDisplayInfo(this.DashboardOptions);
-                                        <span title="@timeZoneDisplayInfo.Item1" data-container="body">
-                                            @job.TimeZoneId
-                                            @if (timeZoneDisplayInfo.Item2 != null)
-                                            {
-                                                <span class="glyphicon glyphicon-exclamation-sign" title="@timeZoneDisplayInfo.Item2.Message"></span>
-                                            }
-                                        </span>
                                     }
-                                </td>
-                                @*状态*@
-                                <td>
-                                    @if (job.JobState == "Running")
-                                    {
-                                        <span class="label label-success">@job.JobState</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="label label-danger">@job.JobState</span>
-                                    }
+                                    <span title="@timeZoneDisplayInfo.Item1" data-container="body">
+                                        @job.TimeZoneId
+                                        @if (timeZoneDisplayInfo.Item2 != null)
+                                        {
+                                            <span class="glyphicon glyphicon-exclamation-sign" title="@timeZoneDisplayInfo.Item2.Message"></span>
+                                        }
+                                    </span>
                                 </td>
                                 @*作业*@
                                 <td class="word-break width-30">
@@ -182,27 +145,15 @@
                                         <em>@Strings.Common_NotAvailable</em>
                                     }
                                 </td>
-                                @*下一次执行时间*@
-                                <td class="align-right min-width">
-                                    @if (!job.NextExecution.HasValue)
+                                @*状态*@
+                                <td>
+                                    @if (job.JobState == "Running")
                                     {
-                                        if (job.Error != null)
-                                        {
-                                            <span class="label label-danger text-uppercase">@Strings.Common_Error</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="label label-default text-uppercase" title="@Strings.RecurringJobsPage_RecurringJobDisabled_Tooltip">@Strings.Common_Disabled</span>
-                                        }
-
-                                    }
-                                    else if (job.RetryAttempt > 0)
-                                    {
-                                        <span class="label label-warning">@Html.RelativeTime(job.NextExecution.Value)</span>
+                                        <span class="label label-success">@job.JobState</span>
                                     }
                                     else
                                     {
-                                        @Html.RelativeTime(job.NextExecution.Value)
+                                        <span class="label label-danger">@job.JobState</span>
                                     }
                                 </td>
                                 @*最后一次执行*@
@@ -228,6 +179,30 @@
                                     {
                                         <em>@Strings.Common_NotAvailable</em>
                                     }
+                                    @*下一次执行时间*@
+                                <td class="align-right min-width">
+                                        @if (!job.NextExecution.HasValue)
+                                        {
+                                            if (job.Error != null)
+                                            {
+                                            <span class="label label-danger text-uppercase">@Strings.Common_Error</span>
+                                            }
+                                            else
+                                            {
+                                            <span class="label label-default text-uppercase" title="@Strings.RecurringJobsPage_RecurringJobDisabled_Tooltip">@Strings.Common_Disabled</span>
+                                            }
+
+                                        }
+                                        else if (job.RetryAttempt > 0)
+                                        {
+                                        <span class="label label-warning">@Html.RelativeTime(job.NextExecution.Value)</span>
+                                        }
+                                        else
+                                        {
+                                            @Html.RelativeTime(job.NextExecution.Value)
+                                        }
+                                </td>
+
                                 </td>
                                 @*创建时间*@
                                 <td class="align-right min-width">
@@ -246,7 +221,7 @@
                                     @if (job.JobStateEnum == JobState.Running)
                                     {
                                         <button type="button" class="js-period-jobs-list-command btn btn-warning btn-xs"
-                                                data-url="@Url.To($"/RecurringJobManage/Stop?jobId={job.Id}")">
+                                        data-url="@Url.To($"{PeriodicJobPage.PageRoute}/stop?jobId={job.Id}")">
                                             Stop
                                         </button>
                                         <button class="js-period-jobs-list-command btn btn-primary btn-xs">
@@ -257,22 +232,21 @@
                                     @if (job.JobStateEnum == JobState.Stoped)
                                     {
                                         <button class="js-period-jobs-list-command btn btn-success btn-xs"
-                                                data-url="@Url.To($"/RecurringJobManage/Start?jobId={job.Id}")">
+                                        data-url="@Url.To($"{PeriodicJobPage.PageRoute}/start?jobId={job.Id}")">
                                             Start
                                         </button>
                                     }
                                 </td>
                                 @if (job.Error != null)
                                 {
-
                                 <tr>
                                     <td colspan="@(IsReadOnly ? "6" : "7")" class="failed-job-details">
                                         <pre class="stack-trace"><code>@Html.StackTrace(job.Error)</code></pre>
                                     </td>
                                 </tr>
-                            }
-                                </tr>
-                            }
+                                }
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

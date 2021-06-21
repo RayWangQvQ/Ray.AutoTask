@@ -86,15 +86,15 @@ namespace Hangfire.Dashboard.Extensions
                 Metric = DashboardMetrics.RecurringJobCount
             });
 
-            DashboardRoutes.Routes.AddBatchCommand($"/{PeriodicJobPage.PageRoute}/remove", (context, jobId) =>
+            DashboardRoutes.Routes.AddBatchCommand($"{PeriodicJobPage.PageRoute}/remove", (context, jobId) =>
             {
                 IRecurringJobManager manager = context.GetRecurringJobManager();
                 //todo:先编辑为开启，再删除
             });
 
 
-            DashboardRoutes.Routes.Add($"/{PeriodicJobPage.PageRoute}/stop", new PetiodicStopDispatcher());
-            DashboardRoutes.Routes.Add($"/{PeriodicJobPage.PageRoute}/start", new PetiodicStartDispatcher());
+            DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/stop", new PetiodicStopDispatcher());
+            DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/start", new PetiodicStartDispatcher());
 
             DashboardRoutes.Routes.Add("/js-ext[0-9]+", new CombinedResourceDispatcher(
                 "application/javascript",

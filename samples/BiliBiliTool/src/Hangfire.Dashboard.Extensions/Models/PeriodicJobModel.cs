@@ -99,6 +99,44 @@ namespace Hangfire.Dashboard.Extensions.Models
 
 
 
+        public Tuple<bool, string> GetCronDisplayInfo()
+        {
+            string cronDescription = null;
+            bool cronError = false;
+
+            if (!String.IsNullOrEmpty(this.Cron))
+            {
+                //测试格式是否异常
+                try
+                {
+                    ParseCronExpression();
+                }
+                catch (Exception ex)
+                {
+                    cronDescription = ex.Message;
+                    cronError = true;
+                }
+
+                if (!cronError)
+                {
+                    //#if FEATURE_CRONDESCRIPTOR
+                    try
+                    {
+                        cronDescription = CronExpressionDescriptor.ExpressionDescriptor.GetDescription(this.Cron, new CronExpressionDescriptor.Options
+                        {
+                            Use24HourTimeFormat = true
+                        });
+                    }
+                    catch (FormatException)
+                    {
+                    }
+                    //#endif
+                }
+            }
+
+            return Tuple.Create<bool, string>(cronError, cronDescription);
+        }
+
         public Tuple<string, Exception> GetTimeZoneDisplayInfo(Hangfire.DashboardOptions dashboardOptions)
         {
             string displayName = "";
@@ -127,8 +165,6 @@ namespace Hangfire.Dashboard.Extensions.Models
 
         public static PeriodicJobModel Create(string jobId, IStorageConnection connection, JobState jobState)
         {
-
-
             var dto = new PeriodicJobModel();
 
             Dictionary<string, string> dataJob = connection.GetAllEntriesFromHash($"{tagRecurringJob}:{jobId}");
@@ -198,6 +234,17 @@ namespace Hangfire.Dashboard.Extensions.Models
             dto.JobStateEnum = jobState;
 
             return dto;
+        }
+
+        private void ParseCronExpression()
+        {
+            //RecurringJobEntity.ParseCronExpression(job.Cron);
+            //通过反射调用
+            Assembly asm = Assembly.GetAssembly(typeof(Hangfire.RecurringJob));
+            MethodInfo mf = asm?.GetType("Hangfire.RecurringJobEntity")
+                ?.GetMethod("ParseCronExpression", BindingFlags.NonPublic | BindingFlags.Static);
+            //CronExpression saf = (CronExpression)mf.Invoke(null, null);
+            mf?.Invoke(null, new[] { this.Cron });
         }
     }
 
