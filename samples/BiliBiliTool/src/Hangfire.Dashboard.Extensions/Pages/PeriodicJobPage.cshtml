@@ -22,6 +22,25 @@
     Init();
 }
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">@Strings.RecurringJobsPage_Title</h1>
@@ -83,6 +102,7 @@
                         @foreach (var job in periodicJobs)
                         {
                             <tr class="js-jobs-list-rows">
+
                                 @*复选框*@
                                 @if (!IsReadOnly)
                                 {
@@ -90,8 +110,10 @@
                                         <input type="checkbox" class="js-jobs-list-checkbox" name="jobs[]" value="@job.Id" />
                                     </td>
                                 }
+
                                 @*编号*@
                                 <td class="word-break width-15">@job.Id</td>
+
                                 @*Cron*@
                                 <td style="min-width: 125px" class="min-width">
                                     @{
@@ -113,6 +135,7 @@
                                         <code class="cron-badge">@job.Cron</code>
                                     }
                                 </td>
+
                                 @*时区*@
                                 <td>
                                     @{
@@ -126,6 +149,7 @@
                                         }
                                     </span>
                                 </td>
+
                                 @*作业*@
                                 <td class="word-break width-30">
                                     @if (job.Job != null)
@@ -145,6 +169,7 @@
                                         <em>@Strings.Common_NotAvailable</em>
                                     }
                                 </td>
+
                                 @*状态*@
                                 <td>
                                     @if (job.JobState == "Running")
@@ -156,6 +181,7 @@
                                         <span class="label label-danger">@job.JobState</span>
                                     }
                                 </td>
+
                                 @*最后一次执行*@
                                 <td class="align-right min-width">
                                     @if (job.LastExecution != null)
@@ -179,31 +205,32 @@
                                     {
                                         <em>@Strings.Common_NotAvailable</em>
                                     }
-                                    @*下一次执行时间*@
-                                <td class="align-right min-width">
-                                        @if (!job.NextExecution.HasValue)
-                                        {
-                                            if (job.Error != null)
-                                            {
-                                            <span class="label label-danger text-uppercase">@Strings.Common_Error</span>
-                                            }
-                                            else
-                                            {
-                                            <span class="label label-default text-uppercase" title="@Strings.RecurringJobsPage_RecurringJobDisabled_Tooltip">@Strings.Common_Disabled</span>
-                                            }
+                                </td>
 
-                                        }
-                                        else if (job.RetryAttempt > 0)
+                                @*下一次执行时间*@
+                                <td class="align-right min-width">
+                                    @if (!job.NextExecution.HasValue)
+                                    {
+                                        if (job.Error != null)
                                         {
-                                        <span class="label label-warning">@Html.RelativeTime(job.NextExecution.Value)</span>
+                                            <span class="label label-danger text-uppercase">@Strings.Common_Error</span>
                                         }
                                         else
                                         {
-                                            @Html.RelativeTime(job.NextExecution.Value)
+                                            <span class="label label-default text-uppercase" title="@Strings.RecurringJobsPage_RecurringJobDisabled_Tooltip">@Strings.Common_Disabled</span>
                                         }
+
+                                    }
+                                    else if (job.RetryAttempt > 0)
+                                    {
+                                        <span class="label label-warning">@Html.RelativeTime(job.NextExecution.Value)</span>
+                                    }
+                                    else
+                                    {
+                                        @Html.RelativeTime(job.NextExecution.Value)
+                                    }
                                 </td>
 
-                                </td>
                                 @*创建时间*@
                                 <td class="align-right min-width">
                                     @if (job.CreatedAt != null)
@@ -215,9 +242,14 @@
                                         <em>N/A</em>
                                     }
                                 </td>
+
                                 @*操作*@
                                 <td style="min-width:200px" class="align-right">
-                                    <button class="btn btn-info btn-xs">Edit</button>
+                                    <button class="btn btn-info btn-xs"
+                                        data-toggle="modal"
+                                        data-target="#myModal">
+                                        Edit
+                                    </button>
                                     @if (job.JobStateEnum == JobState.Running)
                                     {
                                         <button type="button" class="js-period-jobs-list-command btn btn-warning btn-xs"
@@ -237,6 +269,7 @@
                                         </button>
                                     }
                                 </td>
+
                                 @if (job.Error != null)
                                 {
                                 <tr>

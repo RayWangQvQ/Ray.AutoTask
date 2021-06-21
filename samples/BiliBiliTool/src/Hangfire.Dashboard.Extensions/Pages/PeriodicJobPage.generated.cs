@@ -61,8 +61,29 @@ WriteLiteral("\r\n");
     Init();
 
 
-WriteLiteral("\r\n<div class=\"row\">\r\n    <div class=\"col-md-12\">\r\n        <h1 class=\"page-header\"" +
-">");
+WriteLiteral(@"
+<!-- Modal -->
+<div class=""modal fade"" id=""myModal"" tabindex=""-1"" role=""dialog"" aria-labelledby=""myModalLabel"">
+    <div class=""modal-dialog"" role=""document"">
+        <div class=""modal-content"">
+            <div class=""modal-header"">
+                <button type=""button"" class=""close"" data-dismiss=""modal"" aria-label=""Close""><span aria-hidden=""true"">&times;</span></button>
+                <h4 class=""modal-title"" id=""myModalLabel"">Modal title</h4>
+            </div>
+            <div class=""modal-body"">
+                ...
+            </div>
+            <div class=""modal-footer"">
+                <button type=""button"" class=""btn btn-default"" data-dismiss=""modal"">Close</button>
+                <button type=""button"" class=""btn btn-primary"">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=""row"">
+    <div class=""col-md-12"">
+        <h1 class=""page-header"">");
 
 
                            Write(Strings.RecurringJobsPage_Title);
@@ -220,8 +241,8 @@ WriteLiteral("</th>\r\n                        </tr>\r\n                    </th
                          foreach (var job in periodicJobs)
                         {
 
-WriteLiteral("                            <tr class=\"js-jobs-list-rows\">\r\n                     " +
-"           ");
+WriteLiteral("                            <tr class=\"js-jobs-list-rows\">\r\n\r\n                   " +
+"             ");
 
 
 
@@ -246,6 +267,7 @@ WriteLiteral("\" />\r\n                                    </td>\r\n");
 
 
                                 }
+
                                 
 
                                       
@@ -255,7 +277,7 @@ WriteLiteral("                                <td class=\"word-break width-15\">
 
                                                            Write(job.Id);
 
-WriteLiteral("</td>\r\n                                ");
+WriteLiteral("</td>\r\n\r\n                                ");
 
 
 
@@ -312,7 +334,7 @@ WriteLiteral("</code>\r\n");
 
                                     }
 
-WriteLiteral("                                </td>\r\n                                ");
+WriteLiteral("                                </td>\r\n\r\n                                ");
 
 
 
@@ -351,7 +373,7 @@ WriteLiteral("\"></span>\r\n");
                                         }
 
 WriteLiteral("                                    </span>\r\n                                </td" +
-">\r\n                                ");
+">\r\n\r\n                                ");
 
 
 
@@ -409,7 +431,7 @@ WriteLiteral("</em>\r\n");
 
                                     }
 
-WriteLiteral("                                </td>\r\n                                ");
+WriteLiteral("                                </td>\r\n\r\n                                ");
 
 
 
@@ -441,7 +463,7 @@ WriteLiteral("</span>\r\n");
 
                                     }
 
-WriteLiteral("                                </td>\r\n                                ");
+WriteLiteral("                                </td>\r\n\r\n                                ");
 
 
 
@@ -506,17 +528,17 @@ WriteLiteral("</em>\r\n");
 
                                     }
 
-WriteLiteral("                                    ");
+WriteLiteral("                                </td>\r\n\r\n                                ");
 
 
 
 WriteLiteral("\r\n                                <td class=\"align-right min-width\">\r\n");
 
 
-                                         if (!job.NextExecution.HasValue)
+                                     if (!job.NextExecution.HasValue)
+                                    {
+                                        if (job.Error != null)
                                         {
-                                            if (job.Error != null)
-                                            {
 
 WriteLiteral("                                            <span class=\"label label-danger text-" +
 "uppercase\">");
@@ -527,9 +549,9 @@ WriteLiteral("                                            <span class=\"label la
 WriteLiteral("</span>\r\n");
 
 
-                                            }
-                                            else
-                                            {
+                                        }
+                                        else
+                                        {
 
 WriteLiteral("                                            <span class=\"label label-default text" +
 "-uppercase\" title=\"");
@@ -545,11 +567,11 @@ WriteLiteral("\">");
 WriteLiteral("</span>\r\n");
 
 
-                                            }
-
                                         }
-                                        else if (job.RetryAttempt > 0)
-                                        {
+
+                                    }
+                                    else if (job.RetryAttempt > 0)
+                                    {
 
 WriteLiteral("                                        <span class=\"label label-warning\">");
 
@@ -559,17 +581,16 @@ WriteLiteral("                                        <span class=\"label label-
 WriteLiteral("</span>\r\n");
 
 
-                                        }
-                                        else
-                                        {
-                                            
-                                       Write(Html.RelativeTime(job.NextExecution.Value));
+                                    }
+                                    else
+                                    {
+                                        
+                                   Write(Html.RelativeTime(job.NextExecution.Value));
 
-                                                                                       
-                                        }
+                                                                                   
+                                    }
 
-WriteLiteral("                                </td>\r\n\r\n                                </td>\r\n " +
-"                               ");
+WriteLiteral("                                </td>\r\n\r\n                                ");
 
 
 
@@ -591,13 +612,18 @@ WriteLiteral("                                        <em>N/A</em>\r\n");
 
                                     }
 
-WriteLiteral("                                </td>\r\n                                ");
+WriteLiteral("                                </td>\r\n\r\n                                ");
 
 
 
-WriteLiteral("\r\n                                <td style=\"min-width:200px\" class=\"align-right\"" +
-">\r\n                                    <button class=\"btn btn-info btn-xs\">Edit<" +
-"/button>\r\n");
+WriteLiteral(@"
+                                <td style=""min-width:200px"" class=""align-right"">
+                                    <button class=""btn btn-info btn-xs""
+                                        data-toggle=""modal""
+                                        data-target=""#myModal"">
+                                        Edit
+                                    </button>
+");
 
 
                                      if (job.JobStateEnum == JobState.Running)
@@ -643,7 +669,7 @@ WriteLiteral("\">\r\n                                            Start\r\n      
 
                                     }
 
-WriteLiteral("                                </td>\r\n");
+WriteLiteral("                                </td>\r\n\r\n");
 
 
                                  if (job.Error != null)
