@@ -68,28 +68,55 @@ WriteLiteral(@"
         <div class=""modal-content"">
             <div class=""modal-header"">
                 <button type=""button"" class=""close"" data-dismiss=""modal"" aria-label=""Close""><span aria-hidden=""true"">&times;</span></button>
-                <h4 class=""modal-title"" id=""myModalLabel"">Modal title</h4>
+                <h4 class=""modal-title"" id=""myModalLabel"">Add/Edit</h4>
             </div>
             <div class=""modal-body"">
-                ...
-            </div>
-            <div class=""modal-footer"">
-                <button type=""button"" class=""btn btn-default"" data-dismiss=""modal"">Close</button>
-                <button type=""button"" class=""btn btn-primary"">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
+                <form action="""" class=""form-horizontal"">
+                    <div class=""form-group"">
+                        ");
 
-<div class=""row"">
-    <div class=""col-md-12"">
-        <h1 class=""page-header"">");
+
+
+WriteLiteral("\r\n                        <label for=\"\" class=\"col-sm-2 control-label\">Job Id</la" +
+"bel>\r\n                        <div class=\"col-sm-9\">\r\n                          " +
+"  <input type=\"text\" class=\"form-control\" disabled=\"disabled\" id=\"modal_Id\">\r\n  " +
+"                      </div>\r\n                    </div>\r\n                    <d" +
+"iv class=\"form-group\">\r\n                        <label for=\"\" class=\"col-sm-2 co" +
+"ntrol-label\">Cron</label>\r\n                        <div class=\"col-sm-9\">\r\n     " +
+"                       <input type=\"text\" class=\"form-control\" id=\"modal_Cron\">\r" +
+"\n                        </div>\r\n                    </div>\r\n                   " +
+" <div class=\"form-group\">\r\n                        <label for=\"\" class=\"col-sm-2" +
+" control-label\">Time Zone</label>\r\n                        <div class=\"col-sm-9\"" +
+">\r\n                            <input type=\"text\" class=\"form-control\" id=\"modal" +
+"_TimeZoneId\">\r\n                        </div>\r\n                    </div>\r\n     " +
+"               <div class=\"form-group\">\r\n                        <label for=\"\" c" +
+"lass=\"col-sm-2 control-label\">Class</label>\r\n                        <div class=" +
+"\"col-sm-9\">\r\n                            <input type=\"text\" class=\"form-control\"" +
+" id=\"modal_Class\">\r\n                        </div>\r\n                    </div>\r\n" +
+"                    <div class=\"form-group\">\r\n                        <label for" +
+"=\"\" class=\"col-sm-2 control-label\">Method</label>\r\n                        <div " +
+"class=\"col-sm-9\">\r\n                            <input type=\"text\" class=\"form-co" +
+"ntrol\" id=\"modal_Method\">\r\n                        </div>\r\n                    <" +
+"/div>\r\n                </form>\r\n            </div>\r\n            <div class=\"moda" +
+"l-footer\">\r\n                <button type=\"button\" class=\"btn btn-default\" data-d" +
+"ismiss=\"modal\">Close</button>\r\n                <button type=\"button\" class=\"btn " +
+"btn-primary\">Save changes</button>\r\n            </div>\r\n        </div>\r\n    </di" +
+"v>\r\n</div>\r\n\r\n<div class=\"row\">\r\n    <div class=\"col-md-12\">\r\n        <h1 class=" +
+"\"page-header\">");
 
 
                            Write(Strings.RecurringJobsPage_Title);
 
-WriteLiteral("</h1>\r\n\r\n        <div class=\"js-jobs-list\">\r\n            <div class=\"btn-toolbar " +
-"btn-toolbar-top\">\r\n                ");
+WriteLiteral(@"</h1>
+
+        <div class=""js-jobs-list"">
+            <div class=""btn-toolbar btn-toolbar-top"">
+                <button class=""btn btn-default btn-sm""
+                        data-toggle=""modal""
+                        data-target=""#myModal"">
+                    Add
+                </button>
+                ");
 
 
 
@@ -618,12 +645,41 @@ WriteLiteral("                                </td>\r\n\r\n                     
 
 WriteLiteral(@"
                                 <td style=""min-width:200px"" class=""align-right"">
-                                    <button class=""btn btn-info btn-xs""
+                                    <button type=""button"" class=""js-periodic-jobs-list-edit btn btn-info btn-xs""
                                         data-toggle=""modal""
-                                        data-target=""#myModal"">
-                                        Edit
-                                    </button>
-");
+                                        data-target=""#myModal""
+                                        data-id=""");
+
+
+                                            Write(job.Id);
+
+WriteLiteral("\"\r\n                                        data-cron=\"");
+
+
+                                              Write(job.Cron);
+
+WriteLiteral("\"\r\n                                        data-queue=\"");
+
+
+                                               Write(job.Queue);
+
+WriteLiteral("\"\r\n                                        data-class=\"");
+
+
+                                               Write(job.Class);
+
+WriteLiteral("\"\r\n                                        data-method=\"");
+
+
+                                                Write(job.Method);
+
+WriteLiteral("\"\r\n                                        data-timezoneid=\"");
+
+
+                                                    Write(job.TimeZoneId);
+
+WriteLiteral("\">\r\n                                        Edit\r\n                               " +
+"     </button>\r\n");
 
 
                                      if (job.JobStateEnum == JobState.Running)

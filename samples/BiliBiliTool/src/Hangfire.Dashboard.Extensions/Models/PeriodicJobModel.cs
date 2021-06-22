@@ -32,8 +32,8 @@ namespace Hangfire.Dashboard.Extensions.Models
         /// Job
         /// </summary>
         public Hangfire.Common.Job Job { get; set; }
-        public string Class => Job.Method.Name;
-        public string Method => Job.Type.Name;
+        public string Class => Job.Type.Name;
+        public string Method => Job.Method.Name;
 
         public JobLoadException LoadException { get; set; }
 
