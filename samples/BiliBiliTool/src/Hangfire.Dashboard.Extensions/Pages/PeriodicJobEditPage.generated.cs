@@ -70,39 +70,103 @@ WriteLiteral(@"
     </div>
     <div class=""modal-body"">
         <form action="""" class=""form-horizontal"">
-            <div class=""form-group"">
-                <label for="""" class=""col-sm-2 control-label"">Job Id</label>
-                <div class=""col-sm-9"">
-                    <input type=""text"" class=""form-control"" disabled=""disabled"" id=""modal_Id"" value=""");
+
+            ");
 
 
-                                                                                                Write(this.PeriodicJob.Id);
 
-WriteLiteral(@""" />
+WriteLiteral("\r\n            <div class=\"form-group\">\r\n                <label for=\"\" class=\"col-" +
+"sm-2 control-label\">");
+
+
+                                                        Write(Strings.Common_Id);
+
+WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n                    <input type" +
+"=\"text\" class=\"form-control\"\r\n                           disabled=\"disabled\"\r\n  " +
+"                         id=\"modal_Id\"\r\n                           value=\"");
+
+
+                             Write(this.PeriodicJob.Id);
+
+WriteLiteral("\" />\r\n                </div>\r\n            </div>\r\n\r\n            ");
+
+
+
+WriteLiteral("\r\n            <div class=\"form-group\">\r\n                <label for=\"\" class=\"col-" +
+"sm-2 control-label\">");
+
+
+                                                        Write(Strings.RecurringJobsPage_Table_Cron);
+
+WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n                    <input type" +
+"=\"text\" class=\"form-control\"\r\n                           id=\"modal_Cron\"\r\n      " +
+"                     value=\"");
+
+
+                             Write(this.PeriodicJob.Cron);
+
+WriteLiteral("\">\r\n                </div>\r\n            </div>\r\n\r\n            ");
+
+
+
+WriteLiteral("\r\n            <div class=\"form-group\">\r\n                <label for=\"\" class=\"col-" +
+"sm-2 control-label\">");
+
+
+                                                        Write(Strings.RecurringJobsPage_Table_TimeZone);
+
+WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n                    <input type" +
+"=\"text\" class=\"form-control\"\r\n                           id=\"modal_TimeZoneId\"\r\n" +
+"                           value=\"");
+
+
+                             Write(PeriodicJob.TimeZoneId);
+
+WriteLiteral("\">\r\n                </div>\r\n            </div>\r\n\r\n            ");
+
+
+
+WriteLiteral("\r\n            <div class=\"form-group\">\r\n                <label for=\"\" class=\"col-" +
+"sm-2 control-label\">");
+
+
+                                                        Write(Strings.Common_Enqueued);
+
+WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n                    <input type" +
+"=\"text\" class=\"form-control\"\r\n                           id=\"modal_Queue\"\r\n     " +
+"                      value=\"");
+
+
+                             Write(PeriodicJob.Queue);
+
+WriteLiteral(@""">
                 </div>
             </div>
-            <div class=""form-group"">
-                <label for="""" class=""col-sm-2 control-label"">Cron</label>
-                <div class=""col-sm-9"">
-                    <input type=""text"" class=""form-control"" id=""modal_Cron"">
-                </div>
-            </div>
-            <div class=""form-group"">
-                <label for="""" class=""col-sm-2 control-label"">Time Zone</label>
-                <div class=""col-sm-9"">
-                    <input type=""text"" class=""form-control"" id=""modal_TimeZoneId"">
-                </div>
-            </div>
+
             <div class=""form-group"">
                 <label for="""" class=""col-sm-2 control-label"">Class</label>
                 <div class=""col-sm-9"">
-                    <input type=""text"" class=""form-control"" id=""modal_Class"">
+                    <input type=""text"" class=""form-control""
+                           id=""modal_Class""
+                           value=""");
+
+
+                             Write(PeriodicJob.Class);
+
+WriteLiteral(@""">
                 </div>
             </div>
             <div class=""form-group"">
                 <label for="""" class=""col-sm-2 control-label"">Method</label>
                 <div class=""col-sm-9"">
-                    <input type=""text"" class=""form-control"" id=""modal_Method"">
+                    <input type=""text"" class=""form-control""
+                           id=""modal_Method""
+                           value=""");
+
+
+                             Write(PeriodicJob.Method);
+
+WriteLiteral(@""">
                 </div>
             </div>
         </form>

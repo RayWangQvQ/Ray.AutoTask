@@ -22,13 +22,13 @@
     Init();
 }
 
+
 <!-- Modal模态框模板 -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <!-- 内容有具体事件决定加载 -->
     </div>
 </div>
-
 
 <div class="row">
     <div class="col-md-12">
@@ -39,15 +39,15 @@
                 <button class="btn btn-default btn-sm"
                         data-toggle="modal"
                         data-target="#myModal">
-                    Add
+                    @Strings.Common_Created
                 </button>
                 @*触发*@
                 @if (!IsReadOnly)
                 {
                     <button class="js-jobs-list-command btn btn-sm btn-primary"
-                            data-url="@Url.To("/recurring/trigger")"
-                            data-loading-text="@Strings.RecurringJobsPage_Triggering"
-                            disabled="disabled">
+                        data-url="@Url.To("/recurring/trigger")"
+                        data-loading-text="@Strings.RecurringJobsPage_Triggering"
+                        disabled="disabled">
                         <span class="glyphicon glyphicon-play-circle"></span>
                         @Strings.RecurringJobsPage_TriggerNow
                     </button>
@@ -56,10 +56,10 @@
                 @if (!IsReadOnly)
                 {
                     <button class="js-jobs-list-command btn btn-sm btn-default"
-                            data-url="@Url.To("/periodic/remove")"
-                            data-loading-text="@Strings.Common_Deleting"
-                            data-confirm="@Strings.Common_DeleteConfirm"
-                            disabled="disabled">
+                        data-url="@Url.To("/periodic/remove")"
+                        data-loading-text="@Strings.Common_Deleting"
+                        data-confirm="@Strings.Common_DeleteConfirm"
+                        disabled="disabled">
                         <span class="glyphicon glyphicon-remove"></span>
                         @Strings.Common_Delete
                     </button>
@@ -85,6 +85,7 @@
                             <th class="min-width">@Strings.RecurringJobsPage_Table_Cron</th>
                             <th>@Strings.RecurringJobsPage_Table_TimeZone</th>
                             <th>@Strings.Common_Job</th>
+                            <th>@Strings.Common_Enqueued</th>
                             <th>@RayStrings.PeriodicJobsPage_Table_State</th>
                             <th class="align-right min-width">@Strings.RecurringJobsPage_Table_LastExecution</th>
                             <th class="align-right min-width">@Strings.RecurringJobsPage_Table_NextExecution</th>
@@ -164,6 +165,9 @@
                                     }
                                 </td>
 
+                                @*队列*@
+                                <td>@job.Queue</td>
+
                                 @*状态*@
                                 <td>
                                     @if (job.JobState == "Running")
@@ -240,20 +244,20 @@
                                 @*操作*@
                                 <td style="min-width:200px" class="align-right">
                                     <button type="button" class="js-periodic-jobs-list-edit btn btn-info btn-xs"
-                                            data-toggle="modal"
-                                            data-target="#myModal"
-                                            data-id="@job.Id"
-                                            data-cron="@job.Cron"
-                                            data-queue="@job.Queue"
-                                            data-class="@job.Class"
-                                            data-method="@job.Method"
-                                            data-timezoneid="@job.TimeZoneId">
+                                        data-toggle="modal"
+                                        data-target="#myModal"
+                                        data-id="@job.Id"
+                                        data-cron="@job.Cron"
+                                        data-queue="@job.Queue"
+                                        data-class="@job.Class"
+                                        data-method="@job.Method"
+                                        data-timezoneid="@job.TimeZoneId">
                                         Edit
                                     </button>
                                     @if (job.JobStateEnum == JobState.Running)
                                     {
                                         <button type="button" class="js-period-jobs-list-command btn btn-warning btn-xs"
-                                                data-url="@Url.To($"{PeriodicJobPage.PageRoute}/stop?jobId={job.Id}")">
+                                        data-url="@Url.To($"{PeriodicJobPage.PageRoute}/stop?jobId={job.Id}")">
                                             Stop
                                         </button>
                                         <button class="js-period-jobs-list-command btn btn-primary btn-xs">
@@ -264,7 +268,7 @@
                                     @if (job.JobStateEnum == JobState.Stoped)
                                     {
                                         <button class="js-period-jobs-list-command btn btn-success btn-xs"
-                                                data-url="@Url.To($"{PeriodicJobPage.PageRoute}/start?jobId={job.Id}")">
+                                        data-url="@Url.To($"{PeriodicJobPage.PageRoute}/start?jobId={job.Id}")">
                                             Start
                                         </button>
                                     }
@@ -277,9 +281,9 @@
                                         <pre class="stack-trace"><code>@Html.StackTrace(job.Error)</code></pre>
                                     </td>
                                 </tr>
-                            }
-                                </tr>
-                            }
+                                }
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -292,7 +296,6 @@
         }
     </div>
 </div>
-
 
 <script src="@Url.To("/js0")"></script>
 <script src="@Url.To("/js-ext0")"></script>

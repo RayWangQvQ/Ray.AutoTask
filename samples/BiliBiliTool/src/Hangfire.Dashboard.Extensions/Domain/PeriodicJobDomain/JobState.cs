@@ -10,9 +10,9 @@ namespace Hangfire.Dashboard.Extensions.Models
     public enum JobState
     {
         [Description("已停止")]
-        Stoped,
+        Stoped = 0,
 
         [Description("运行中")]
-        Running
+        Running = 1
     }
 }

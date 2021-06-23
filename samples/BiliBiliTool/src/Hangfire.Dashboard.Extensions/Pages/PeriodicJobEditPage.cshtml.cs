@@ -4,11 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Hangfire.Dashboard.Extensions.Models;
+using Hangfire.Dashboard.Extensions.Repositories;
 
 namespace Hangfire.Dashboard.Extensions.Pages
 {
-    public partial class PeriodicJobEditPage
+    partial class PeriodicJobEditPage
     {
+        private readonly PeriodicJobRepository _periodicJobRepository;
+
+        public PeriodicJobEditPage()
+        {
+            _periodicJobRepository = new PeriodicJobRepository();
+        }
+
         protected string JobId = "";
 
         protected PeriodicJobModel PeriodicJob = new PeriodicJobModel();
@@ -21,10 +29,7 @@ namespace Hangfire.Dashboard.Extensions.Pages
 
         protected virtual PeriodicJobModel GetJobById(string id)
         {
-            return new PeriodicJobModel
-            {
-                Id = id
-            };
+            return _periodicJobRepository.GetPeriodicJobById(id);
         }
     }
 }

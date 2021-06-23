@@ -106,12 +106,12 @@ namespace Hangfire.Dashboard.Extensions
 
         internal static string GetContentFolderNamespace(string contentFolder)
         {
-            return $"{typeof(PeriodicJobAgent).Namespace}.Content.{contentFolder}";
+            return $"{typeof(ConfigurationExtensions).Namespace}.Content.{contentFolder}";
         }
 
         private static Assembly GetExecutingAssembly()
         {
-            return typeof(PeriodicJobAgent).GetTypeInfo().Assembly;
+            return typeof(ConfigurationExtensions).GetTypeInfo().Assembly;
         }
     }
 }

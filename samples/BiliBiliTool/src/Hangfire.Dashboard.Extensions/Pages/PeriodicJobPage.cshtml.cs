@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Hangfire.Dashboard.Extensions.Models;
+using Hangfire.Dashboard.Extensions.Repositories;
 using Hangfire.Dashboard.Extensions.Resources;
 using Hangfire.Dashboard.Pages;
 using Hangfire.Dashboard.Resources;
@@ -14,11 +15,15 @@ namespace Hangfire.Dashboard.Extensions.Pages
     {
         public static string Title => RayStrings.NavigationMenu_PeriodicJobs;
 
-        public static string PageRoute => "/periodic";  
+        public static string PageRoute => "/periodic";
+
+
+        private readonly PeriodicJobRepository _periodicJobRepository;
 
         public PeriodicJobPage()
         {
             Layout = new LayoutPage(Strings.RecurringJobsPage_Title);
+            _periodicJobRepository = new PeriodicJobRepository();
         }
 
         public void Init()
@@ -27,21 +32,7 @@ namespace Hangfire.Dashboard.Extensions.Pages
             int.TryParse(Query("from"), out from);
             int.TryParse(Query("count"), out perPage);
 
-            using (var connection = Storage.GetConnection())
-            {
-                var storageConnection = connection as JobStorageConnection;
-                if (storageConnection != null)
-                {
-                    List<PeriodicJobModel> running = PeriodicJobAgent.GetPeriodicJobs(JobState.Running);
-                    List<PeriodicJobModel> stoped = PeriodicJobAgent.GetPeriodicJobs(JobState.Stoped);
-                    periodicJobs.AddRange(running);
-                    periodicJobs.AddRange(stoped);
-                }
-                else
-                {
-                    var recurringJobs = connection.GetRecurringJobs();
-                }
-            }
+            periodicJobs.AddRange(_periodicJobRepository.GetPeriodicJobs());
         }
 
         public List<PeriodicJobModel> periodicJobs = new List<PeriodicJobModel>();

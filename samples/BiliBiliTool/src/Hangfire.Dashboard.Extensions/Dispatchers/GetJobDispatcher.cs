@@ -11,16 +11,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Hangfire.Dashboard.Extensions.Extensions;
 using Hangfire.Dashboard.Extensions.Models;
+using Hangfire.Dashboard.Extensions.Repositories;
 
 namespace Hangfire.Dashboard.Extensions.Dispatchers
 {
-    internal sealed class GetPeriodicJobDispatcher //: Dashboard.IDashboardDispatcher
+    internal sealed class GetPeriodicJobDispatcher : Dashboard.IDashboardDispatcher
     {
         private readonly IStorageConnection _connection;
+        private readonly PeriodicJobRepository _periodicJobRepository;
 
         public GetPeriodicJobDispatcher()
         {
             _connection = JobStorage.Current.GetConnection();
+            _periodicJobRepository = new PeriodicJobRepository();
         }
 
         public async Task Dispatch([NotNull] Dashboard.DashboardContext context)
@@ -33,10 +36,7 @@ namespace Hangfire.Dashboard.Extensions.Dispatchers
             }
 
             var periodicJob = new List<PeriodicJobModel>();
-            List<PeriodicJobModel> running = PeriodicJobAgent.GetPeriodicJobs(JobState.Running);
-            List<PeriodicJobModel> stoped = PeriodicJobAgent.GetPeriodicJobs(JobState.Stoped);
-            periodicJob.AddRange(running);
-            periodicJob.AddRange(stoped);
+            periodicJob.AddRange(_periodicJobRepository.GetPeriodicJobs());
 
             await context.Response.WriteAsync(JsonConvert.SerializeObject(periodicJob));
         }
