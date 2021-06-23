@@ -62,47 +62,17 @@ WriteLiteral("\r\n");
 
 
 WriteLiteral(@"
-<!-- Modal -->
+<!-- Modal模态框模板 -->
 <div class=""modal fade"" id=""myModal"" tabindex=""-1"" role=""dialog"" aria-labelledby=""myModalLabel"">
     <div class=""modal-dialog"" role=""document"">
-        <div class=""modal-content"">
-            <div class=""modal-header"">
-                <button type=""button"" class=""close"" data-dismiss=""modal"" aria-label=""Close""><span aria-hidden=""true"">&times;</span></button>
-                <h4 class=""modal-title"" id=""myModalLabel"">Add/Edit</h4>
-            </div>
-            <div class=""modal-body"">
-                <form action="""" class=""form-horizontal"">
-                    <div class=""form-group"">
-                        ");
+        <!-- 内容有具体事件决定加载 -->
+    </div>
+</div>
 
 
-
-WriteLiteral("\r\n                        <label for=\"\" class=\"col-sm-2 control-label\">Job Id</la" +
-"bel>\r\n                        <div class=\"col-sm-9\">\r\n                          " +
-"  <input type=\"text\" class=\"form-control\" disabled=\"disabled\" id=\"modal_Id\">\r\n  " +
-"                      </div>\r\n                    </div>\r\n                    <d" +
-"iv class=\"form-group\">\r\n                        <label for=\"\" class=\"col-sm-2 co" +
-"ntrol-label\">Cron</label>\r\n                        <div class=\"col-sm-9\">\r\n     " +
-"                       <input type=\"text\" class=\"form-control\" id=\"modal_Cron\">\r" +
-"\n                        </div>\r\n                    </div>\r\n                   " +
-" <div class=\"form-group\">\r\n                        <label for=\"\" class=\"col-sm-2" +
-" control-label\">Time Zone</label>\r\n                        <div class=\"col-sm-9\"" +
-">\r\n                            <input type=\"text\" class=\"form-control\" id=\"modal" +
-"_TimeZoneId\">\r\n                        </div>\r\n                    </div>\r\n     " +
-"               <div class=\"form-group\">\r\n                        <label for=\"\" c" +
-"lass=\"col-sm-2 control-label\">Class</label>\r\n                        <div class=" +
-"\"col-sm-9\">\r\n                            <input type=\"text\" class=\"form-control\"" +
-" id=\"modal_Class\">\r\n                        </div>\r\n                    </div>\r\n" +
-"                    <div class=\"form-group\">\r\n                        <label for" +
-"=\"\" class=\"col-sm-2 control-label\">Method</label>\r\n                        <div " +
-"class=\"col-sm-9\">\r\n                            <input type=\"text\" class=\"form-co" +
-"ntrol\" id=\"modal_Method\">\r\n                        </div>\r\n                    <" +
-"/div>\r\n                </form>\r\n            </div>\r\n            <div class=\"moda" +
-"l-footer\">\r\n                <button type=\"button\" class=\"btn btn-default\" data-d" +
-"ismiss=\"modal\">Close</button>\r\n                <button type=\"button\" class=\"btn " +
-"btn-primary\">Save changes</button>\r\n            </div>\r\n        </div>\r\n    </di" +
-"v>\r\n</div>\r\n\r\n<div class=\"row\">\r\n    <div class=\"col-md-12\">\r\n        <h1 class=" +
-"\"page-header\">");
+<div class=""row"">
+    <div class=""col-md-12"">
+        <h1 class=""page-header"">");
 
 
                            Write(Strings.RecurringJobsPage_Title);
@@ -127,18 +97,18 @@ WriteLiteral("\r\n");
                 {
 
 WriteLiteral("                    <button class=\"js-jobs-list-command btn btn-sm btn-primary\"\r\n" +
-"                        data-url=\"");
+"                            data-url=\"");
 
 
-                             Write(Url.To("/recurring/trigger"));
+                                 Write(Url.To("/recurring/trigger"));
 
-WriteLiteral("\"\r\n                        data-loading-text=\"");
+WriteLiteral("\"\r\n                            data-loading-text=\"");
 
 
-                                      Write(Strings.RecurringJobsPage_Triggering);
+                                          Write(Strings.RecurringJobsPage_Triggering);
 
-WriteLiteral("\"\r\n                        disabled=\"disabled\">\r\n                        <span cl" +
-"ass=\"glyphicon glyphicon-play-circle\"></span>\r\n                        ");
+WriteLiteral("\"\r\n                            disabled=\"disabled\">\r\n                        <spa" +
+"n class=\"glyphicon glyphicon-play-circle\"></span>\r\n                        ");
 
 
                    Write(Strings.RecurringJobsPage_TriggerNow);
@@ -156,23 +126,23 @@ WriteLiteral("\r\n                    </button>\r\n");
                 {
 
 WriteLiteral("                    <button class=\"js-jobs-list-command btn btn-sm btn-default\"\r\n" +
-"                        data-url=\"");
+"                            data-url=\"");
 
 
-                             Write(Url.To("/periodic/remove"));
+                                 Write(Url.To("/periodic/remove"));
 
-WriteLiteral("\"\r\n                        data-loading-text=\"");
-
-
-                                      Write(Strings.Common_Deleting);
-
-WriteLiteral("\"\r\n                        data-confirm=\"");
+WriteLiteral("\"\r\n                            data-loading-text=\"");
 
 
-                                 Write(Strings.Common_DeleteConfirm);
+                                          Write(Strings.Common_Deleting);
 
-WriteLiteral("\"\r\n                        disabled=\"disabled\">\r\n                        <span cl" +
-"ass=\"glyphicon glyphicon-remove\"></span>\r\n                        ");
+WriteLiteral("\"\r\n                            data-confirm=\"");
+
+
+                                     Write(Strings.Common_DeleteConfirm);
+
+WriteLiteral("\"\r\n                            disabled=\"disabled\">\r\n                        <spa" +
+"n class=\"glyphicon glyphicon-remove\"></span>\r\n                        ");
 
 
                    Write(Strings.Common_Delete);
@@ -646,37 +616,37 @@ WriteLiteral("                                </td>\r\n\r\n                     
 WriteLiteral(@"
                                 <td style=""min-width:200px"" class=""align-right"">
                                     <button type=""button"" class=""js-periodic-jobs-list-edit btn btn-info btn-xs""
-                                        data-toggle=""modal""
-                                        data-target=""#myModal""
-                                        data-id=""");
+                                            data-toggle=""modal""
+                                            data-target=""#myModal""
+                                            data-id=""");
 
 
-                                            Write(job.Id);
+                                                Write(job.Id);
 
-WriteLiteral("\"\r\n                                        data-cron=\"");
-
-
-                                              Write(job.Cron);
-
-WriteLiteral("\"\r\n                                        data-queue=\"");
+WriteLiteral("\"\r\n                                            data-cron=\"");
 
 
-                                               Write(job.Queue);
+                                                  Write(job.Cron);
 
-WriteLiteral("\"\r\n                                        data-class=\"");
-
-
-                                               Write(job.Class);
-
-WriteLiteral("\"\r\n                                        data-method=\"");
+WriteLiteral("\"\r\n                                            data-queue=\"");
 
 
-                                                Write(job.Method);
+                                                   Write(job.Queue);
 
-WriteLiteral("\"\r\n                                        data-timezoneid=\"");
+WriteLiteral("\"\r\n                                            data-class=\"");
 
 
-                                                    Write(job.TimeZoneId);
+                                                   Write(job.Class);
+
+WriteLiteral("\"\r\n                                            data-method=\"");
+
+
+                                                    Write(job.Method);
+
+WriteLiteral("\"\r\n                                            data-timezoneid=\"");
+
+
+                                                        Write(job.TimeZoneId);
 
 WriteLiteral("\">\r\n                                        Edit\r\n                               " +
 "     </button>\r\n");
@@ -687,10 +657,10 @@ WriteLiteral("\">\r\n                                        Edit\r\n           
 
 WriteLiteral("                                        <button type=\"button\" class=\"js-period-jo" +
 "bs-list-command btn btn-warning btn-xs\"\r\n                                       " +
-" data-url=\"");
+"         data-url=\"");
 
 
-                                             Write(Url.To($"{PeriodicJobPage.PageRoute}/stop?jobId={job.Id}"));
+                                                     Write(Url.To($"{PeriodicJobPage.PageRoute}/stop?jobId={job.Id}"));
 
 WriteLiteral("\">\r\n                                            Stop\r\n                           " +
 "             </button>\r\n");
@@ -714,10 +684,11 @@ WriteLiteral("                                        <button class=\"btn btn-da
                                     {
 
 WriteLiteral("                                        <button class=\"js-period-jobs-list-comman" +
-"d btn btn-success btn-xs\"\r\n                                        data-url=\"");
+"d btn btn-success btn-xs\"\r\n                                                data-" +
+"url=\"");
 
 
-                                             Write(Url.To($"{PeriodicJobPage.PageRoute}/start?jobId={job.Id}"));
+                                                     Write(Url.To($"{PeriodicJobPage.PageRoute}/start?jobId={job.Id}"));
 
 WriteLiteral("\">\r\n                                            Start\r\n                          " +
 "              </button>\r\n");
@@ -747,12 +718,12 @@ WriteLiteral("</code></pre>\r\n                                    </td>\r\n    
 "         </tr>\r\n");
 
 
-                                }
+                            }
 
-WriteLiteral("                            </tr>\r\n");
+WriteLiteral("                                </tr>\r\n");
 
 
-                        }
+                            }
 
 WriteLiteral("                    </tbody>\r\n                </table>\r\n            </div>\r\n\r\n");
 
@@ -772,7 +743,7 @@ WriteLiteral("\r\n");
 
             }
 
-WriteLiteral("        </div>\r\n        }\r\n    </div>\r\n</div>\r\n\r\n<script src=\"");
+WriteLiteral("        </div>\r\n        }\r\n    </div>\r\n</div>\r\n\r\n\r\n<script src=\"");
 
 
         Write(Url.To("/js0"));

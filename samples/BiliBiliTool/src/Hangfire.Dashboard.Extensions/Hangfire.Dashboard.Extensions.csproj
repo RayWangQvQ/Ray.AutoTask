@@ -28,10 +28,20 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>RayStrings.resx</DependentUpon>
     </Compile>
-    <Compile Update="Pages\PeriodicJobPage.generated.cs">
+    <Compile Update="Pages\PeriodicJobEditPage.generated.cs">
       <DependentUpon>PeriodicJobPage.cshtml</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Pages\PeriodicJobEditPage.generated.cs">
+      <DependentUpon>PeriodicJobEditPage.cshtml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Pages\PeriodicJobPage.generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PeriodicJobPage.cshtml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -44,6 +54,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Pages\PeriodicJobEditPage.cshtml">
+      <LastGenOutput>PeriodicJobEditPage.generated.cs</LastGenOutput>
+      <Generator>RazorGenerator</Generator>
+    </None>
     <None Update="Pages\PeriodicJobPage.cshtml">
       <LastGenOutput>PeriodicJobPage.generated.cs</LastGenOutput>
       <Generator>RazorGenerator</Generator>

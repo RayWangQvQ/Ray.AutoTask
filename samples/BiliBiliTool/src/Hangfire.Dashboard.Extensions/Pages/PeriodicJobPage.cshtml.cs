@@ -14,7 +14,7 @@ namespace Hangfire.Dashboard.Extensions.Pages
     {
         public static string Title => RayStrings.NavigationMenu_PeriodicJobs;
 
-        public static string PageRoute => "/periodic";
+        public static string PageRoute => "/periodic";  
 
         public PeriodicJobPage()
         {
@@ -50,5 +50,7 @@ namespace Hangfire.Dashboard.Extensions.Pages
         public int perPage;
 
         public Pager pager;
+
+        public PeriodicJobModel PeriodicModel = new PeriodicJobModel();
     }
 }

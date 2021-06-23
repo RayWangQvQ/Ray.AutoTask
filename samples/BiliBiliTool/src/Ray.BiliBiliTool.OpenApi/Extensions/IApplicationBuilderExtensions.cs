@@ -21,11 +21,18 @@ namespace Ray.BiliBiliTool.OpenApi.Extensions
 
             app.UseHangfireDashboard();
 
-            backgroundJobs.Enqueue(() => Log.Information("Hello world from Hangfire!"));
-            //backgroundJobs.Enqueue<ITestAppService>(t => t.DoTask());
-            RecurringJob.AddOrUpdate<IDailyTaskAppService>(t => t.DoTask(), "5 13 * * *", TimeZoneInfo.Local, typeof(IDailyTaskAppService).Description().ToLower());
-            RecurringJob.AddOrUpdate<ILiveLotteryTaskAppService>(t => t.DoTask(), "30 */2 * * *", TimeZoneInfo.Local, typeof(ILiveLotteryTaskAppService).Description().ToLower());
-            RecurringJob.AddOrUpdate<IUnfollowBatchedTaskAppService>(t => t.DoTask(), "0 0 * * 1", TimeZoneInfo.Local, typeof(IUnfollowBatchedTaskAppService).Description().ToLower());
+            try
+            {
+                backgroundJobs.Enqueue(() => Log.Information("Hello world from Hangfire!"));
+                //backgroundJobs.Enqueue<ITestAppService>(t => t.DoTask());
+                RecurringJob.AddOrUpdate<IDailyTaskAppService>(t => t.DoTask(), "5 13 * * *", TimeZoneInfo.Local, typeof(IDailyTaskAppService).Description().ToLower());
+                RecurringJob.AddOrUpdate<ILiveLotteryTaskAppService>(t => t.DoTask(), "30 */2 * * *", TimeZoneInfo.Local, typeof(ILiveLotteryTaskAppService).Description().ToLower());
+                RecurringJob.AddOrUpdate<IUnfollowBatchedTaskAppService>(t => t.DoTask(), "0 0 * * 1", TimeZoneInfo.Local, typeof(IUnfollowBatchedTaskAppService).Description().ToLower());
+            }
+            catch
+            {
+                //ignore
+            }
 
             return app;
         }

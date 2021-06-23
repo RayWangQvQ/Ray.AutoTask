@@ -77,6 +77,7 @@ namespace Hangfire.Dashboard.Extensions
         private static void CreateManagmentJob()
         {
             DashboardRoutes.Routes.AddRazorPage(PeriodicJobPage.PageRoute, x => new PeriodicJobPage());
+            DashboardRoutes.Routes.AddRazorPage(PeriodicJobPage.PageRoute + "/edit", x => new PeriodicJobEditPage());
 
             NavigationMenu.Items.Add(page =>
             //new MenuItem(RecurringJobExtensionsPage.Title, page.Url.To(RecurringJobExtensionsPage.PageRoute))
