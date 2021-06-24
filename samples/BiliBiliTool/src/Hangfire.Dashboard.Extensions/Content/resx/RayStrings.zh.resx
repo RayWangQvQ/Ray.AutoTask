@@ -120,6 +120,9 @@
   <data name="NavigationMenu_PeriodicJobs" xml:space="preserve">
     <value>周期作业管理</value>
   </data>
+  <data name="PeriodicJobsPage_Edit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
   <data name="PeriodicJobsPage_Table_Operation" xml:space="preserve">
     <value>操作</value>
   </data>

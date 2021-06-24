@@ -70,6 +70,15 @@ namespace Hangfire.Dashboard.Extensions.Resources {
         }
         
         /// <summary>
+        ///   查找类似 Edit 的本地化字符串。
+        /// </summary>
+        public static string PeriodicJobsPage_Edit {
+            get {
+                return ResourceManager.GetString("PeriodicJobsPage_Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Operation 的本地化字符串。
         /// </summary>
         public static string PeriodicJobsPage_Table_Operation {

@@ -120,6 +120,9 @@
   <data name="NavigationMenu_PeriodicJobs" xml:space="preserve">
     <value>Periodic Jobs</value>
   </data>
+  <data name="PeriodicJobsPage_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
   <data name="PeriodicJobsPage_Table_Operation" xml:space="preserve">
     <value>Operation</value>
   </data>

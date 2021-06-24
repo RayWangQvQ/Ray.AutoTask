@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\**" />
+    <EmbeddedResource Remove="Repositories\**" />
+    <None Remove="Repositories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Content\js\hangfire-ext.js" />
   </ItemGroup>
 
@@ -62,10 +68,6 @@
       <LastGenOutput>PeriodicJobPage.generated.cs</LastGenOutput>
       <Generator>RazorGenerator</Generator>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>

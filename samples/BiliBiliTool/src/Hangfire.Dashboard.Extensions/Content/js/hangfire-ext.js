@@ -30,7 +30,8 @@
             $("#modal_TimeZoneId").val($this.data('timezoneid'));
             */
 
-            $('.modal-dialog').load(`periodic/edit?id=${$this.data('id')}`);
+            var id = $this.data('id') || ' ';
+            $('.modal-dialog').load(`periodic/edit?id=${id}`);
         });
     })
 })();

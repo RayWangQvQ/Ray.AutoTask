@@ -62,16 +62,16 @@ WriteLiteral("\r\n");
     this.Init();
 
 
-WriteLiteral(@"
-<div class=""modal-content"">
-    <div class=""modal-header"">
-        <button type=""button"" class=""close"" data-dismiss=""modal"" aria-label=""Close""><span aria-hidden=""true"">&times;</span></button>
-        <h4 class=""modal-title"" id=""myModalLabel"">Add/Edit</h4>
-    </div>
-    <div class=""modal-body"">
-        <form action="""" class=""form-horizontal"">
+WriteLiteral("\r\n<div class=\"modal-content\">\r\n    <div class=\"modal-header\">\r\n        <button ty" +
+"pe=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hid" +
+"den=\"true\">&times;</span></button>\r\n        <h4 class=\"modal-title\" id=\"myModalL" +
+"abel\">");
 
-            ");
+
+                                             Write(Title);
+
+WriteLiteral("</h4>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n        <form action=\"\" class=\"f" +
+"orm-horizontal\">\r\n\r\n            ");
 
 
 
