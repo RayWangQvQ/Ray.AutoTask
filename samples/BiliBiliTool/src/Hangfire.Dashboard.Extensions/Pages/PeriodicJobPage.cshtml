@@ -45,9 +45,9 @@
                 @if (!IsReadOnly)
                 {
                     <button class="js-jobs-list-command btn btn-sm btn-primary"
-                            data-url="@Url.To("/recurring/trigger")"
-                            data-loading-text="@Strings.RecurringJobsPage_Triggering"
-                            disabled="disabled">
+                        data-url="@Url.To("/recurring/trigger")"
+                        data-loading-text="@Strings.RecurringJobsPage_Triggering"
+                        disabled="disabled">
                         <span class="glyphicon glyphicon-play-circle"></span>
                         @Strings.RecurringJobsPage_TriggerNow
                     </button>
@@ -56,10 +56,10 @@
                 @if (!IsReadOnly)
                 {
                     <button class="js-jobs-list-command btn btn-sm btn-default"
-                            data-url="@Url.To("/periodic/remove")"
-                            data-loading-text="@Strings.Common_Deleting"
-                            data-confirm="@Strings.Common_DeleteConfirm"
-                            disabled="disabled">
+                        data-url="@Url.To("/periodic/remove")"
+                        data-loading-text="@Strings.Common_Deleting"
+                        data-confirm="@Strings.Common_DeleteConfirm"
+                        disabled="disabled">
                         <span class="glyphicon glyphicon-remove"></span>
                         @Strings.Common_Delete
                     </button>
@@ -244,20 +244,15 @@
                                 @*操作*@
                                 <td style="min-width:200px" class="align-right">
                                     <button type="button" class="js-periodic-jobs-list-edit btn btn-info btn-xs"
-                                            data-toggle="modal"
-                                            data-target="#myModal"
-                                            data-id="@job.Id"
-                                            data-cron="@job.Cron"
-                                            data-queue="@job.Queue"
-                                            data-class="@job.Class"
-                                            data-method="@job.Method"
-                                            data-timezoneid="@job.TimeZoneId">
+                                        data-toggle="modal"
+                                        data-target="#myModal"
+                                        data-id="@job.Id">
                                         @RayStrings.PeriodicJobsPage_Edit
                                     </button>
                                     @if (job.JobStateEnum == JobState.Running)
                                     {
                                         <button type="button" class="js-period-jobs-list-command btn btn-warning btn-xs"
-                                                data-url="@Url.To($"{PeriodicJobPage.PageRoute}/stop?jobId={job.Id}")">
+                                        data-url="@Url.To($"{PeriodicJobPage.PageRoute}/stop?jobId={job.Id}")">
                                             Stop
                                         </button>
                                         <button class="js-period-jobs-list-command btn btn-primary btn-xs">
@@ -268,7 +263,7 @@
                                     @if (job.JobStateEnum == JobState.Stoped)
                                     {
                                         <button class="js-period-jobs-list-command btn btn-success btn-xs"
-                                                data-url="@Url.To($"{PeriodicJobPage.PageRoute}/start?jobId={job.Id}")">
+                                        data-url="@Url.To($"{PeriodicJobPage.PageRoute}/start?jobId={job.Id}")">
                                             Start
                                         </button>
                                     }
@@ -281,9 +276,9 @@
                                         <pre class="stack-trace"><code>@Html.StackTrace(job.Error)</code></pre>
                                     </td>
                                 </tr>
-                            }
-                                </tr>
-                            }
+                                }
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

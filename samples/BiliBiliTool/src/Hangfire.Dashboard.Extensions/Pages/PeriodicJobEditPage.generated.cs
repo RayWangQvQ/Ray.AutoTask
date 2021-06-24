@@ -86,7 +86,7 @@ WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n          
 "                         id=\"modal_Id\"\r\n                           value=\"");
 
 
-                             Write(this.PeriodicJob.Id);
+                              Write(PeriodicJob?.Id);
 
 WriteLiteral("\" />\r\n                </div>\r\n            </div>\r\n\r\n            ");
 
@@ -103,7 +103,7 @@ WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n          
 "                     value=\"");
 
 
-                             Write(this.PeriodicJob.Cron);
+                              Write(PeriodicJob?.Cron);
 
 WriteLiteral("\">\r\n                </div>\r\n            </div>\r\n\r\n            ");
 
@@ -120,7 +120,7 @@ WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n          
 "                           value=\"");
 
 
-                             Write(PeriodicJob.TimeZoneId);
+                              Write(PeriodicJob?.TimeZoneId);
 
 WriteLiteral("\">\r\n                </div>\r\n            </div>\r\n\r\n            ");
 
@@ -137,7 +137,7 @@ WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n          
 "                      value=\"");
 
 
-                             Write(PeriodicJob.Queue);
+                              Write(PeriodicJob?.Queue);
 
 WriteLiteral(@""">
                 </div>
@@ -151,7 +151,7 @@ WriteLiteral(@""">
                            value=""");
 
 
-                             Write(PeriodicJob.Class);
+                              Write(PeriodicJob?.Class);
 
 WriteLiteral(@""">
                 </div>
@@ -164,7 +164,7 @@ WriteLiteral(@""">
                            value=""");
 
 
-                             Write(PeriodicJob.Method);
+                              Write(PeriodicJob?.Method);
 
 WriteLiteral(@""">
                 </div>
@@ -173,7 +173,7 @@ WriteLiteral(@""">
     </div>
     <div class=""modal-footer"">
         <button type=""button"" class=""btn btn-default"" data-dismiss=""modal"">Close</button>
-        <button type=""button"" class=""btn btn-primary"">Save changes</button>
+        <button type=""button"" class=""btn btn-primary"" id=""btnPeriodicSubmit"">Save changes</button>
     </div>
 </div>
 

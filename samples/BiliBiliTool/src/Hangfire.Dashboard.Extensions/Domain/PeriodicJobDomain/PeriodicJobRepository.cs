@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Hangfire.Dashboard.Extensions.Models;
+using Hangfire.States;
 using Hangfire.Storage;
 
 namespace Hangfire.Dashboard.Extensions.Repositories
@@ -121,6 +124,123 @@ namespace Hangfire.Dashboard.Extensions.Repositories
                 transaction.AddToSet($"{tagStopJob}", JobId);
                 transaction.Commit();
             }
+        }
+
+        public void AddOrUpdate(PeriodicJobModel periodicJob)
+        {
+            var job = periodicJob;
+            var timeZone = TimeZoneInfo.Utc;
+
+            /*
+            if (!Utility.IsValidSchedule(job.Cron))
+            {
+                response.Status = false;
+                response.Message = "Invalid CRON";
+
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+
+                return;
+            }
+            */
+
+            try
+            {
+                if (!string.IsNullOrEmpty(job.TimeZoneId))
+                {
+                    timeZone = TimeZoneInfo.FindSystemTimeZoneById(job.TimeZoneId);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                //response.Status = false;
+                //response.Message = ex.Message;
+
+                //await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+
+                return;
+            }
+
+
+            if (!StorageAssemblySingleton.GetInstance().IsValidType(job.Class))
+            {
+                //response.Status = false;
+                //response.Message = "The Class not found";
+
+                //await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+
+                return;
+            }
+
+            if (!StorageAssemblySingleton.GetInstance().IsValidMethod(job.Class, job.Method))
+            {
+                //response.Status = false;
+                //response.Message = "The Method not found";
+
+                //await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+
+                return;
+            }
+
+
+            var methodInfo = StorageAssemblySingleton.GetInstance()
+                .currentAssembly
+                .Where(x => x?.GetType(job.Class)?.GetMethod(job.Method) != null)
+                .FirstOrDefault()
+                .GetType(job.Class)
+                .GetMethod(job.Method);
+
+            AddOrUpdate(
+                      job.Id,
+                      methodInfo,
+                      job.Cron,
+                      timeZone,
+                      job.Queue ?? EnqueuedState.DefaultQueue);
+        }
+
+        /// <summary>
+        /// Register RecurringJob via <see cref="MethodInfo"/>.
+        /// </summary>
+        /// <param name="jobId">The identifier of the RecurringJob</param>
+        /// <param name="method">the specified method</param>
+        /// <param name="cron">Cron expressions</param>
+        /// <param name="timeZone"><see cref="TimeZoneInfo"/></param>
+        /// <param name="queue">Queue name</param>
+        public void AddOrUpdate(string jobId, MethodInfo method, string cron, TimeZoneInfo timeZone, string queue)
+        {
+            if (jobId == null) throw new ArgumentNullException(nameof(jobId));
+            if (method == null) throw new ArgumentNullException(nameof(method));
+            if (cron == null) throw new ArgumentNullException(nameof(cron));
+            if (timeZone == null) throw new ArgumentNullException(nameof(timeZone));
+            if (queue == null) throw new ArgumentNullException(nameof(queue));
+
+            var parameters = method.GetParameters();
+
+            Expression[] args = new Expression[parameters.Length];
+
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                args[i] = Expression.Default(parameters[i].ParameterType);
+            }
+
+            var x = Expression.Parameter(method.DeclaringType, "x");
+
+            var methodCall = method.IsStatic ? Expression.Call(method, args) : Expression.Call(x, method, args);
+
+            var addOrUpdate = Expression.Call(
+                typeof(RecurringJob),
+                nameof(RecurringJob.AddOrUpdate),
+                new Type[] { method.DeclaringType },
+                new Expression[]
+                {
+                    Expression.Constant(jobId),
+                    Expression.Lambda(methodCall, x),
+                    Expression.Constant(cron),
+                    Expression.Constant(timeZone),
+                    Expression.Constant(queue)
+                });
+
+            Expression.Lambda(addOrUpdate).Compile().DynamicInvoke();
         }
     }
 }

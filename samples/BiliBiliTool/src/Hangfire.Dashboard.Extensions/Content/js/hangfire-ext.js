@@ -21,17 +21,26 @@
         $(this).on('click', '.js-periodic-jobs-list-edit', function (e) {
             var $this = $(this);
 
-            /*
-            $("#modal_Id").val($this.data('id'));
-            $("#modal_Cron").val($this.data('cron'));
-            $("#modal_Queue").val($this.data('queue'));
-            $("#modal_Class").val($this.data('class'));
-            $("#modal_Method").val($this.data('method'));
-            $("#modal_TimeZoneId").val($this.data('timezoneid'));
-            */
+            $this.prop('disabled');
 
             var id = $this.data('id') || ' ';
             $('.modal-dialog').load(`periodic/edit?id=${id}`);
         });
-    })
+    });
+
+    $(document).on('click', '#btnPeriodicSubmit', function (e) {
+        //取值
+        var id = $("#modal_Id").val();
+
+        //提交
+
+        //隐藏
+        $("#myModal").modal("hide");
+
+        //清空文本框
+
+        //刷新页面
+        window.location.reload();
+        alert(id);
+    });
 })();

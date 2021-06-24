@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Hangfire.Dashboard.Extensions.Models;
 using Hangfire.Dashboard.Extensions.Repositories;
@@ -21,14 +22,16 @@ namespace Hangfire.Dashboard.Extensions.Pages
 
         protected string JobId = "";
 
-        protected PeriodicJobModel PeriodicJob = new PeriodicJobModel();
+        protected PeriodicJobModel PeriodicJob;
 
         public string Title { get; set; }
+
+        protected bool IsEdit => !string.IsNullOrWhiteSpace(JobId);
 
         protected virtual void Init()
         {
             JobId = "";
-            PeriodicJob = new PeriodicJobModel();
+            PeriodicJob = null;
 
             JobId = Query("id");
             if (string.IsNullOrWhiteSpace(JobId))
