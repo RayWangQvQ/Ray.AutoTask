@@ -25,22 +25,53 @@
 
             var id = $this.data('id') || ' ';
             $('.modal-dialog').load(`periodic/edit?id=${id}`);
+
+            e.preventDefault();
         });
     });
 
-    $(document).on('click', '#btnPeriodicSubmit', function (e) {
+    $('#periodicModal').on('click', '#btnPeriodicSubmit', function (e) {
+        var $this = $(this);
         //取值
         var id = $("#modal_Id").val();
+        var cron = $("#modal_Cron").val();
+        var timeZone = $("#modal_TimeZoneId").val();
+        var queue = $("#modal_Queue").val();
+        var classFullName = $("#modal_ClassFullName").val();
+        var methodName = $("#modal_Method").val();
 
         //提交
-
-        //隐藏
-        $("#myModal").modal("hide");
+        $.post($this.data('url'), {
+            "Id": id,
+            "Cron": cron,
+            "TimeZoneId": timeZone,
+            "Queue": queue,
+            "ClassFullName": classFullName,
+            "MethodName": methodName
+        }, function (data, status, xhr) {
+            if (status == 'success') {
+                alert('提交成功,点击返回列表页');
+                //隐藏
+                $("#myModal").modal("hide");
+                //清空文本框
+                clearInput();
+                //刷新页面
+                window.location.reload();
+            }
+            else {
+                alert('异常：' + status + data);
+            }
+        });
+        e.preventDefault();
 
         //清空文本框
-
-        //刷新页面
-        window.location.reload();
-        alert(id);
+        function clearInput() {
+            $("#modal_Id").val('');
+            $("#modal_Cron").val('');
+            $("#modal_TimeZoneId").val('');
+            $("#modal_Queue").val('');
+            $("#modal_Class").val('');
+            $("#modal_Method").val('');
+        }
     });
 })();

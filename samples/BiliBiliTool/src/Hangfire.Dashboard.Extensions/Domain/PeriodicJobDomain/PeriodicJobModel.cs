@@ -28,12 +28,25 @@ namespace Hangfire.Dashboard.Extensions.Models
         /// </summary>
         public string Queue { get; set; }
 
+        #region job
         /// <summary>
         /// Job
         /// </summary>
         public Hangfire.Common.Job Job { get; set; }
-        public string Class => Job?.Type?.Name;
-        public string Method => Job?.Method?.Name;
+        public string ClassName => Job.Type.Name;
+        private string _classFullName;
+        public string ClassFullName
+        {
+            get => !string.IsNullOrWhiteSpace(_classFullName) ? _classFullName : Job?.Type?.FullName;
+            set { this._classFullName = value; }
+        }
+        private string _methodName;
+        public string MethodName
+        {
+            get => !string.IsNullOrWhiteSpace(_methodName) ? _methodName : Job?.Method?.Name;
+            set { this._methodName = value; }
+        }
+        #endregion
 
         public JobLoadException LoadException { get; set; }
 

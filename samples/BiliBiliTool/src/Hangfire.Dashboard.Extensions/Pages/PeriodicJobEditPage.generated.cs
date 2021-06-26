@@ -62,16 +62,17 @@ WriteLiteral("\r\n");
     this.Init();
 
 
-WriteLiteral("\r\n<div class=\"modal-content\">\r\n    <div class=\"modal-header\">\r\n        <button ty" +
-"pe=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hid" +
-"den=\"true\">&times;</span></button>\r\n        <h4 class=\"modal-title\" id=\"myModalL" +
-"abel\">");
+WriteLiteral(@"
+<div class=""modal-content"" id=""periodicModal"">
+    <div class=""modal-header"">
+        <button type=""button"" class=""close"" data-dismiss=""modal"" aria-label=""Close""><span aria-hidden=""true"">&times;</span></button>
+        <h4 class=""modal-title"" id=""myModalLabel"">");
 
 
                                              Write(Title);
 
-WriteLiteral("</h4>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n        <form action=\"\" class=\"f" +
-"orm-horizontal\">\r\n\r\n            ");
+WriteLiteral("</h4>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n        <form class=\"form-horizo" +
+"ntal\">\r\n\r\n            ");
 
 
 
@@ -82,8 +83,8 @@ WriteLiteral("\r\n            <div class=\"form-group\">\r\n                <lab
                                                         Write(Strings.Common_Id);
 
 WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n                    <input type" +
-"=\"text\" class=\"form-control\"\r\n                           disabled=\"disabled\"\r\n  " +
-"                         id=\"modal_Id\"\r\n                           value=\"");
+"=\"text\" class=\"form-control\"\r\n                           id=\"modal_Id\"\r\n        " +
+"                   value=\"");
 
 
                               Write(PeriodicJob?.Id);
@@ -139,32 +140,35 @@ WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n          
 
                               Write(PeriodicJob?.Queue);
 
-WriteLiteral(@""">
-                </div>
-            </div>
+WriteLiteral("\">\r\n                </div>\r\n            </div>\r\n\r\n            ");
 
+
+
+WriteLiteral(@"
             <div class=""form-group"">
-                <label for="""" class=""col-sm-2 control-label"">Class</label>
+                <label for="""" class=""col-sm-2 control-label"">Class Full Name</label>
                 <div class=""col-sm-9"">
                     <input type=""text"" class=""form-control""
-                           id=""modal_Class""
+                           id=""modal_ClassFullName""
                            value=""");
 
 
-                              Write(PeriodicJob?.Class);
+                              Write(PeriodicJob?.ClassFullName);
 
-WriteLiteral(@""">
-                </div>
-            </div>
+WriteLiteral("\">\r\n                </div>\r\n            </div>\r\n            ");
+
+
+
+WriteLiteral(@"
             <div class=""form-group"">
-                <label for="""" class=""col-sm-2 control-label"">Method</label>
+                <label for="""" class=""col-sm-2 control-label"">Method Name</label>
                 <div class=""col-sm-9"">
                     <input type=""text"" class=""form-control""
                            id=""modal_Method""
                            value=""");
 
 
-                              Write(PeriodicJob?.Method);
+                              Write(PeriodicJob?.MethodName);
 
 WriteLiteral(@""">
                 </div>
@@ -173,12 +177,12 @@ WriteLiteral(@""">
     </div>
     <div class=""modal-footer"">
         <button type=""button"" class=""btn btn-default"" data-dismiss=""modal"">Close</button>
-        <button type=""button"" class=""btn btn-primary"" id=""btnPeriodicSubmit"">Save changes</button>
-    </div>
-</div>
+        <button type=""button"" class=""btn btn-primary"" id=""btnPeriodicSubmit"" data-url=""");
 
 
-<script src=""");
+                                                                                  Write(Url.To("/periodic/addOrUpdate"));
+
+WriteLiteral("\">Save changes</button>\r\n    </div>\r\n</div>\r\n\r\n\r\n<script src=\"");
 
 
         Write(Url.To("/js0"));

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Cronos;
 using Hangfire.Dashboard.Extensions.Models;
 using Hangfire.States;
 using Hangfire.Storage;
@@ -131,67 +132,32 @@ namespace Hangfire.Dashboard.Extensions.Repositories
             var job = periodicJob;
             var timeZone = TimeZoneInfo.Utc;
 
-            /*
-            if (!Utility.IsValidSchedule(job.Cron))
+            //验证Cron
+            CronExpression.Parse(periodicJob.Cron);
+
+            //验证时区
+            if (!string.IsNullOrEmpty(job.TimeZoneId))
             {
-                response.Status = false;
-                response.Message = "Invalid CRON";
-
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-
-                return;
-            }
-            */
-
-            try
-            {
-                if (!string.IsNullOrEmpty(job.TimeZoneId))
-                {
-                    timeZone = TimeZoneInfo.FindSystemTimeZoneById(job.TimeZoneId);
-                }
-            }
-            catch (Exception ex)
-            {
-
-                //response.Status = false;
-                //response.Message = ex.Message;
-
-                //await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-
-                return;
+                timeZone = TimeZoneInfo.FindSystemTimeZoneById(job.TimeZoneId);
             }
 
-
-            if (!StorageAssemblySingleton.GetInstance().IsValidType(job.Class))
+            //验证ClassName
+            var classType = StorageAssemblySingleton.GetInstance().GetClassType(job.ClassFullName);
+            if (classType == null)
             {
-                //response.Status = false;
-                //response.Message = "The Class not found";
-
-                //await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-
-                return;
+                throw new Exception($"Class Name :{job.ClassFullName} 不存在");
             }
 
-            if (!StorageAssemblySingleton.GetInstance().IsValidMethod(job.Class, job.Method))
+            //验证MethodName
+            var methodInfo = StorageAssemblySingleton.GetInstance().GetMethodInfo(job.ClassFullName, job.MethodName);
+            if (methodInfo == null)
             {
-                //response.Status = false;
-                //response.Message = "The Method not found";
-
-                //await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-
-                return;
+                throw new Exception($"Method Name :{job.MethodName} 不存在");
             }
-
-
-            var methodInfo = StorageAssemblySingleton.GetInstance()
-                .currentAssembly
-                .Where(x => x?.GetType(job.Class)?.GetMethod(job.Method) != null)
-                .FirstOrDefault()
-                .GetType(job.Class)
-                .GetMethod(job.Method);
 
             AddOrUpdate(
                       job.Id,
+                      classType,
                       methodInfo,
                       job.Cron,
                       timeZone,
@@ -206,35 +172,37 @@ namespace Hangfire.Dashboard.Extensions.Repositories
         /// <param name="cron">Cron expressions</param>
         /// <param name="timeZone"><see cref="TimeZoneInfo"/></param>
         /// <param name="queue">Queue name</param>
-        public void AddOrUpdate(string jobId, MethodInfo method, string cron, TimeZoneInfo timeZone, string queue)
+        public void AddOrUpdate(string jobId, Type classType, MethodInfo method, string cron, TimeZoneInfo timeZone, string queue)
         {
             if (jobId == null) throw new ArgumentNullException(nameof(jobId));
+            if (classType == null) throw new ArgumentNullException(nameof(classType));
             if (method == null) throw new ArgumentNullException(nameof(method));
             if (cron == null) throw new ArgumentNullException(nameof(cron));
             if (timeZone == null) throw new ArgumentNullException(nameof(timeZone));
             if (queue == null) throw new ArgumentNullException(nameof(queue));
 
-            var parameters = method.GetParameters();
-
+            ParameterInfo[] parameters = method.GetParameters();
             Expression[] args = new Expression[parameters.Length];
-
             for (int i = 0; i < parameters.Length; i++)
             {
                 args[i] = Expression.Default(parameters[i].ParameterType);
             }
 
-            var x = Expression.Parameter(method.DeclaringType, "x");
+            ParameterExpression parameterExpression = Expression.Parameter(classType, "parameterExpression");
 
-            var methodCall = method.IsStatic ? Expression.Call(method, args) : Expression.Call(x, method, args);
+            MethodCallExpression methodCall = method.IsStatic
+                ? Expression.Call(method, args)
+                : Expression.Call(parameterExpression, method, args);
 
-            var addOrUpdate = Expression.Call(
-                typeof(RecurringJob),
-                nameof(RecurringJob.AddOrUpdate),
-                new Type[] { method.DeclaringType },
-                new Expression[]
+            MethodCallExpression addOrUpdate = Expression.Call(
+                type: typeof(RecurringJob),
+                methodName: nameof(RecurringJob.AddOrUpdate),
+                //typeArguments: new Type[] { method.DeclaringType },
+                typeArguments: new Type[] { classType },
+                arguments: new Expression[]
                 {
                     Expression.Constant(jobId),
-                    Expression.Lambda(methodCall, x),
+                    Expression.Lambda(methodCall, parameterExpression),
                     Expression.Constant(cron),
                     Expression.Constant(timeZone),
                     Expression.Constant(queue)

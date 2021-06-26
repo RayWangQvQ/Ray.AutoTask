@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Ray.BiliBiliTool.OpenApi.Extensions;
 using Hangfire.Dashboard.Extensions;
+using System.Reflection;
 
 namespace Ray.BiliBiliTool.OpenApi
 {
@@ -50,7 +51,7 @@ namespace Ray.BiliBiliTool.OpenApi
             //.UseLiteDbStorage("Hangfire.db")
             .UseConsole()
             .UseRecurringJobAdmin(typeof(Startup).Assembly)
-            .UseDashboardExtensions()
+            .UseDashboardExtensions(typeof(Startup).Assembly)
             );
             services.AddHangfireServer();
             services.AddHangfireConsoleExtensions();

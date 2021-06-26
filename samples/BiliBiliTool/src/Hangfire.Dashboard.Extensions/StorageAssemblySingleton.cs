@@ -28,7 +28,7 @@ namespace Hangfire.Dashboard.Extensions
             return _instance;
         }
 
-        internal void SetCurrentAssembly(bool includeReferences = false, params Assembly[] assemblies)
+        internal void SetCurrentAssembly(bool includeReferences = true, params Assembly[] assemblies)
         {
             currentAssembly.AddRange(assemblies);
 
@@ -46,11 +46,34 @@ namespace Hangfire.Dashboard.Extensions
 
         public bool IsValidType(string type) => currentAssembly.Any(x => x.GetType(type) != null);
 
-        public bool IsValidMethod(string type, string method) => currentAssembly
-            ?.FirstOrDefault(x => x.GetType(type) != null)
-            ?.GetType(type)
-            ?.GetMethod(method) != null;
+        public Type GetClassType(string className)
+        {
+            return currentAssembly
+                ?.FirstOrDefault(x => x.GetType(className) != null)
+                ?.GetType(className);
+        }
 
+        public MethodInfo GetMethodInfo(string typeName, string methodName)
+        {
+            var type = GetClassType(typeName);
+            if (type == null) return null;
 
+            //如果是interface,则要拿到所有父接口(因为interface的GetMethod方法拿不到继承的父类的方法)
+            if (type.IsInterface)
+            {
+                var interfaces = type.GetInterfaces().ToList();
+                interfaces.Add(type);
+                foreach (var t in interfaces)
+                {
+                    var mi = t.GetMethod(methodName);
+                    if (mi != null) return mi;
+                }
+                return null;
+            }
+            else
+            {
+                return type?.GetMethod(methodName);
+            }
+        }
     }
 }

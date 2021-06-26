@@ -22,7 +22,7 @@ namespace Hangfire.Dashboard.Extensions
         {
             if (assemblies == null) throw new ArgumentNullException(nameof(assemblies));
 
-            //StorageAssemblySingleton.GetInstance().SetCurrentAssembly(assemblies: assemblies.Select(x => Type.GetType(x).Assembly).ToArray());
+            StorageAssemblySingleton.GetInstance().SetCurrentAssembly(assemblies: assemblies.Select(x => Type.GetType(x).Assembly).ToArray());
             //PeriodicJobBuilder.GetAllJobs();
             CreateManagmentJob();
             return config;
@@ -35,7 +35,7 @@ namespace Hangfire.Dashboard.Extensions
         {
             if (assemblies == null) throw new ArgumentNullException(nameof(assemblies));
 
-            //StorageAssemblySingleton.GetInstance().SetCurrentAssembly(includeReferences, assemblies.Select(x => Type.GetType(x).Assembly).ToArray());
+            StorageAssemblySingleton.GetInstance().SetCurrentAssembly(includeReferences, assemblies.Select(x => Type.GetType(x).Assembly).ToArray());
             //PeriodicJobBuilder.GetAllJobs();
             CreateManagmentJob();
             return config;
@@ -48,7 +48,7 @@ namespace Hangfire.Dashboard.Extensions
         {
             if (assemblies == null) throw new ArgumentNullException(nameof(assemblies));
 
-            //StorageAssemblySingleton.GetInstance().SetCurrentAssembly(assemblies: assemblies);
+            StorageAssemblySingleton.GetInstance().SetCurrentAssembly(assemblies: assemblies);
             //PeriodicJobBuilder.GetAllJobs();
             CreateManagmentJob();
             return config;
@@ -61,7 +61,7 @@ namespace Hangfire.Dashboard.Extensions
         {
             if (assemblies == null) throw new ArgumentNullException(nameof(assemblies));
 
-            //StorageAssemblySingleton.GetInstance().SetCurrentAssembly(includeReferences, assemblies);
+            StorageAssemblySingleton.GetInstance().SetCurrentAssembly(includeReferences, assemblies);
             //PeriodicJobBuilder.GetAllJobs();
             CreateManagmentJob();
             return config;
@@ -96,6 +96,7 @@ namespace Hangfire.Dashboard.Extensions
 
             DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/stop", new PetiodicStopDispatcher());
             DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/start", new PetiodicStartDispatcher());
+            DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/addOrUpdate", new PetiodicAddOrUpdateDispatcher());
 
             DashboardRoutes.Routes.Add("/js-ext[0-9]+", new CombinedResourceDispatcher(
                 "application/javascript",

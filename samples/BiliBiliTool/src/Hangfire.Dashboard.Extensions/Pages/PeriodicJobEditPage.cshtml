@@ -23,20 +23,19 @@
     this.Init();
 }
 
-<div class="modal-content">
+<div class="modal-content" id="periodicModal">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">@Title</h4>
     </div>
     <div class="modal-body">
-        <form action="" class="form-horizontal">
+        <form class="form-horizontal">
 
             @*Id*@
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">@Strings.Common_Id</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control"
-                           disabled="disabled"
                            id="modal_Id"
                            value="@(PeriodicJob?.Id)" />
                 </div>
@@ -72,27 +71,29 @@
                 </div>
             </div>
 
+            @*ClassFullName*@
             <div class="form-group">
-                <label for="" class="col-sm-2 control-label">Class</label>
+                <label for="" class="col-sm-2 control-label">Class Full Name</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control"
-                           id="modal_Class"
-                           value="@(PeriodicJob?.Class)">
+                           id="modal_ClassFullName"
+                           value="@(PeriodicJob?.ClassFullName)">
                 </div>
             </div>
+            @*MethodName*@
             <div class="form-group">
-                <label for="" class="col-sm-2 control-label">Method</label>
+                <label for="" class="col-sm-2 control-label">Method Name</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control"
                            id="modal_Method"
-                           value="@(PeriodicJob?.Method)">
+                           value="@(PeriodicJob?.MethodName)">
                 </div>
             </div>
         </form>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="btnPeriodicSubmit">Save changes</button>
+        <button type="button" class="btn btn-primary" id="btnPeriodicSubmit" data-url="@Url.To("/periodic/addOrUpdate")">Save changes</button>
     </div>
 </div>
 

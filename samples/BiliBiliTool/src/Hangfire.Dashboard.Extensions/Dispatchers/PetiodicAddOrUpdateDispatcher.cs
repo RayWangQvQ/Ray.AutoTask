@@ -29,88 +29,23 @@ namespace Hangfire.Dashboard.Extensions.Dispatchers
             _periodicJobRepository = new PeriodicJobRepository();
         }
 
-        public async Task Dispatch([NotNull] Dashboard.DashboardContext context)
+        public Task Dispatch([NotNull] Dashboard.DashboardContext context)
         {
             var job = new PeriodicJobModel();
-            job.Id = context.Request.GetQuery("Id");
-            job.Cron = context.Request.GetQuery("Cron");
-            job.Queue = context.Request.GetQuery("Queue");
-            job.TimeZoneId = context.Request.GetQuery("TimeZoneId");
+            job.Id = context.Request.GetFormValuesAsync("Id").Result.FirstOrDefault();
+            job.Cron = context.Request.GetFormValuesAsync("Cron").Result.FirstOrDefault();
+            job.Queue = context.Request.GetFormValuesAsync("Queue").Result.FirstOrDefault();
+            job.TimeZoneId = context.Request.GetFormValuesAsync("TimeZoneId").Result.FirstOrDefault();
 
-            var class = context.Request.GetQuery("Class");
-            var method = context.Request.GetQuery("Method");
+            job.ClassFullName = context.Request.GetFormValuesAsync("ClassFullName").Result.FirstOrDefault();
+            job.MethodName = context.Request.GetFormValuesAsync("MethodName").Result.FirstOrDefault();
 
-        var timeZone = TimeZoneInfo.Utc;
+            _periodicJobRepository.AddOrUpdate(job);
 
-            /*
-            if (!Utility.IsValidSchedule(job.Cron))
-            {
-                response.Status = false;
-                response.Message = "Invalid CRON";
+            context.Response.StatusCode = (int)HttpStatusCode.OK;
 
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-
-                return;
-            }
-            */
-
-            try
-            {
-                if (!string.IsNullOrEmpty(job.TimeZoneId))
-                {
-                    timeZone = TimeZoneInfo.FindSystemTimeZoneById(job.TimeZoneId);
-                }
-}
-            catch (Exception ex)
-{
-    //response.Status = false;
-    //response.Message = ex.Message;
-
-    //await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-
-    return;
-}
-
-
-if (!StorageAssemblySingleton.GetInstance().IsValidType(job.Class))
-{
-    //response.Status = false;
-    //response.Message = "The Class not found";
-
-    //await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-
-    return;
-}
-
-if (!StorageAssemblySingleton.GetInstance().IsValidMethod(job.Class, job.Method))
-{
-    //response.Status = false;
-    //response.Message = "The Method not found";
-
-    //await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-
-    return;
-}
-
-
-MethodInfo? methodInfo = StorageAssemblySingleton.GetInstance()
-    .currentAssembly
-    .Where(x => x?.GetType(job.Class)?.GetMethod(job.Method) != null)
-    .FirstOrDefault()
-    .GetType(job.Class)
-    .GetMethod(job.Method);
-
-_periodicJobRepository.AddOrUpdate(
-          job.Id,
-          methodInfo,
-          job.Cron,
-          timeZone,
-          job.Queue ?? EnqueuedState.DefaultQueue);
-
-
-context.Response.StatusCode = (int)HttpStatusCode.OK;
-
-await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+            return Task.CompletedTask;
         }
     }
 }
+
