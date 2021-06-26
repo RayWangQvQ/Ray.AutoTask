@@ -29,22 +29,20 @@ namespace Hangfire.Dashboard.Extensions.Dispatchers
             _periodicJobRepository = new PeriodicJobRepository();
         }
 
-        public Task Dispatch([NotNull] Dashboard.DashboardContext context)
+        public async Task Dispatch([NotNull] Dashboard.DashboardContext context)
         {
             var job = new PeriodicJobModel();
-            job.Id = context.Request.GetFormValuesAsync("Id").Result.FirstOrDefault();
-            job.Cron = context.Request.GetFormValuesAsync("Cron").Result.FirstOrDefault();
-            job.Queue = context.Request.GetFormValuesAsync("Queue").Result.FirstOrDefault();
-            job.TimeZoneId = context.Request.GetFormValuesAsync("TimeZoneId").Result.FirstOrDefault();
+            job.Id = (await context.Request.GetFormValuesAsync("Id").ConfigureAwait(false)).FirstOrDefault();
+            job.Cron = (await context.Request.GetFormValuesAsync("Cron").ConfigureAwait(false)).FirstOrDefault();
+            job.Queue = (await context.Request.GetFormValuesAsync("Queue").ConfigureAwait(false)).FirstOrDefault();
+            job.TimeZoneId = (await context.Request.GetFormValuesAsync("TimeZoneId").ConfigureAwait(false)).FirstOrDefault();
 
-            job.ClassFullName = context.Request.GetFormValuesAsync("ClassFullName").Result.FirstOrDefault();
-            job.MethodName = context.Request.GetFormValuesAsync("MethodName").Result.FirstOrDefault();
+            job.ClassFullName = (await context.Request.GetFormValuesAsync("ClassFullName").ConfigureAwait(false)).FirstOrDefault();
+            job.MethodName = (await context.Request.GetFormValuesAsync("MethodName").ConfigureAwait(false)).FirstOrDefault();
 
             _periodicJobRepository.AddOrUpdate(job);
 
             context.Response.StatusCode = (int)HttpStatusCode.OK;
-
-            return Task.CompletedTask;
         }
     }
 }

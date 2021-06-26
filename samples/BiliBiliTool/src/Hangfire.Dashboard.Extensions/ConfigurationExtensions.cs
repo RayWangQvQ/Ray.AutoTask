@@ -4,6 +4,7 @@ using System.Reflection;
 using Hangfire.Annotations;
 using Hangfire.Dashboard.Extensions.Dispatchers;
 using Hangfire.Dashboard.Extensions.Pages;
+using Hangfire.Dashboard.Extensions.Repositories;
 using Hangfire.Dashboard.Extensions.Resources;
 
 namespace Hangfire.Dashboard.Extensions
@@ -76,33 +77,46 @@ namespace Hangfire.Dashboard.Extensions
 
         private static void CreateManagmentJob()
         {
-            DashboardRoutes.Routes.AddRazorPage(PeriodicJobPage.PageRoute, x => new PeriodicJobPage());
-            DashboardRoutes.Routes.AddRazorPage(PeriodicJobPage.PageRoute + "/edit", x => new PeriodicJobEditPage());
+            //注册js文件路由
+            DashboardRoutes.Routes.Add("/js-ext[0-9]+", new CombinedResourceDispatcher(
+                "application/javascript",
+                GetExecutingAssembly(),
+                GetContentFolderNamespace("js"),
+                Javascripts));
 
+            //注册页面路由
+            DashboardRoutes.Routes.AddRazorPage(PeriodicJobPage.PageRoute, x => new PeriodicJobPage());
+            DashboardRoutes.Routes.AddRazorPage($"{PeriodicJobPage.PageRoute}/edit", x => new PeriodicJobEditPage());
+
+            //新增顶部菜单
             NavigationMenu.Items.Add(page =>
-            //new MenuItem(RecurringJobExtensionsPage.Title, page.Url.To(RecurringJobExtensionsPage.PageRoute))
             new MenuItem(RayStrings.NavigationMenu_PeriodicJobs, page.Url.To(PeriodicJobPage.PageRoute))
             {
                 Active = page.RequestPath.StartsWith(PeriodicJobPage.PageRoute),
                 Metric = DashboardMetrics.RecurringJobCount
             });
 
-            DashboardRoutes.Routes.AddBatchCommand($"{PeriodicJobPage.PageRoute}/remove", (context, jobId) =>
-            {
-                IRecurringJobManager manager = context.GetRecurringJobManager();
-                //todo:先编辑为开启，再删除
-            });
+            //注册api
+            DashboardRoutes.Routes.AddBatchCommand($"{PeriodicJobPage.PageRoute}/remove",
+                (context, jobId) =>
+                {
+                    IRecurringJobManager manager = context.GetRecurringJobManager();
+                    PeriodicJobRepository periodicJobRepository = new PeriodicJobRepository();
+                    var job = periodicJobRepository.GetPeriodicJobById(jobId);
+
+                    if (job.JobStateEnum == Models.JobState.Stoped)
+                    {
+                        periodicJobRepository.StartPeriodicJob(jobId);
+                    }
+                    manager.RemoveIfExists(jobId);
+                });
 
 
             DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/stop", new PetiodicStopDispatcher());
             DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/start", new PetiodicStartDispatcher());
             DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/addOrUpdate", new PetiodicAddOrUpdateDispatcher());
 
-            DashboardRoutes.Routes.Add("/js-ext[0-9]+", new CombinedResourceDispatcher(
-                "application/javascript",
-                GetExecutingAssembly(),
-                GetContentFolderNamespace("js"),
-                Javascripts));
+
         }
 
         internal static string GetContentFolderNamespace(string contentFolder)

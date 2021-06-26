@@ -22,7 +22,6 @@
     Init();
 }
 
-
 <!-- Modal模态框模板 -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -34,6 +33,8 @@
     <div class="col-md-12">
         <h1 class="page-header">@Strings.RecurringJobsPage_Title</h1>
         <div class="js-jobs-list">
+
+            @*顶部操作栏*@
             <div class="btn-toolbar btn-toolbar-top">
                 @*新增*@
                 <button class="btn btn-default btn-sm js-periodic-jobs-list-edit"
@@ -96,7 +97,7 @@
                     <tbody>
                         @foreach (var job in periodicJobs)
                         {
-                            <tr class="js-jobs-list-rows">
+                            <tr class="js-jobs-list-row">
 
                                 @*复选框*@
                                 @if (!IsReadOnly)
@@ -288,9 +289,9 @@
                 @: @Html.Paginator(pager)
             }
         </div>
-        }
     </div>
 </div>
 
-<script src="@Url.To("/js0")"></script>
+
+@*<script src="@Url.To("/js0")"></script>*@
 <script src="@Url.To("/js-ext0")"></script>
