@@ -46,8 +46,10 @@ namespace Hangfire.Dashboard.Extensions
 
         public bool IsValidType(string type) => currentAssembly.Any(x => x.GetType(type) != null);
 
-        public bool IsValidMethod(string type, string method) => currentAssembly?
-                                                                    .FirstOrDefault(x => x.GetType(type) != null)?.GetType(type)?.GetMethod(method) != null;
+        public bool IsValidMethod(string type, string method) => currentAssembly
+            ?.FirstOrDefault(x => x.GetType(type) != null)
+            ?.GetType(type)
+            ?.GetMethod(method) != null;
 
 
     }
