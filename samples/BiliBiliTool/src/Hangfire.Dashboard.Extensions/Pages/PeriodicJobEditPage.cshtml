@@ -45,9 +45,7 @@
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">@Strings.RecurringJobsPage_Table_Cron</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control"
-                           id="modal_Cron"
-                           value="@(PeriodicJob?.Cron)">
+                    <cron-expression-input id="modal_Cron" color="d58512" value="@(PeriodicJob?.Cron)" hotValidate="true"></cron-expression-input>
                 </div>
             </div>
 

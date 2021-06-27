@@ -99,14 +99,14 @@ WriteLiteral("\r\n            <div class=\"form-group\">\r\n                <lab
 
                                                         Write(Strings.RecurringJobsPage_Table_Cron);
 
-WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n                    <input type" +
-"=\"text\" class=\"form-control\"\r\n                           id=\"modal_Cron\"\r\n      " +
-"                     value=\"");
+WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n                    <cron-expre" +
+"ssion-input id=\"modal_Cron\" color=\"d58512\" value=\"");
 
 
-                              Write(PeriodicJob?.Cron);
+                                                                             Write(PeriodicJob?.Cron);
 
-WriteLiteral("\">\r\n                </div>\r\n            </div>\r\n\r\n            ");
+WriteLiteral("\" hotValidate=\"true\"></cron-expression-input>\r\n                </div>\r\n          " +
+"  </div>\r\n\r\n            ");
 
 
 

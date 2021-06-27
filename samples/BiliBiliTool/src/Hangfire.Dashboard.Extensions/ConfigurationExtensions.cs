@@ -14,7 +14,13 @@ namespace Hangfire.Dashboard.Extensions
     {
         private static readonly string[] Javascripts =
         {
-            "hangfire-ext.js"
+            "hangfire-ext.js",
+            "cron-expression-input.min.js"
+        };
+
+        private static readonly string[] Stylesheets =
+        {
+            "cron-expression-input.min.css",
         };
 
         /// <param name="includeReferences">If is true it will load all dlls references of the current project to find all jobs.</param>
@@ -79,25 +85,20 @@ namespace Hangfire.Dashboard.Extensions
         private static void CreateManagmentJob()
         {
             //注册js文件路由
-            /*
-            DashboardRoutes.Routes.Add("/js-ext[0-9]+", new CombinedResourceDispatcher(
-                "application/javascript",
-                GetExecutingAssembly(),
-                GetContentFolderNamespace("js"),
-                Javascripts));
-            */
-
-            //Assembly assembly = IntrospectionExtensions.GetTypeInfo(typeof(ConfigurationExtensions)).Assembly;
-            //Assembly assembly = typeof(ConfigurationExtensions).Assembly;
             string pathTemplate = DashboardRoutes.Routes.Contains("/js[0-9]+") ? "/js[0-9]+" : "/js[0-9]{3}";
-            //DashboardRoutes.Routes.Append(pathTemplate, new EmbeddedResourceDispatcher(assembly, "Hangfire.Dashboard.Extensions.Content.js.hangfire-ext.js", null));
-            //DashboardRoutes.Routes.Append(pathTemplate, new EmbeddedResourceDispatcher("application/javascript", assembly, "hangfire-ext.js"));
-            //DashboardRoutes.Routes.Append(pathTemplate, new DynamicJsDispatcher(options));
             DashboardRoutes.Routes.Append(pathTemplate, new CombinedResourceDispatcher(
                 "application/javascript",
                 GetExecutingAssembly(),
                 GetContentFolderNamespace("js"),
                 Javascripts));
+
+            //注册css文件路由
+            var cssPath = DashboardRoutes.Routes.Contains("/css[0-9]+") ? "/css[0-9]+" : "/css[0-9]{3}";
+            DashboardRoutes.Routes.Append(cssPath, new CombinedResourceDispatcher(
+                "text/css",
+                GetExecutingAssembly(),
+                GetContentFolderNamespace("css"),
+                Stylesheets));
 
             //注册页面路由
             DashboardRoutes.Routes.AddRazorPage(PeriodicJobPage.PageRoute, x => new PeriodicJobPage());
