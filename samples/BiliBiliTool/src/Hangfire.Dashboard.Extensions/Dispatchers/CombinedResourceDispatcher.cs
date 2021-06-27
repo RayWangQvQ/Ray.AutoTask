@@ -8,6 +8,9 @@ using Hangfire.Annotations;
 
 namespace Hangfire.Dashboard.Extensions.Dispatchers
 {
+    /// <summary>
+    /// [调度器]混合多个Resource
+    /// </summary>
     public class CombinedResourceDispatcher : EmbeddedResourceDispatcher
     {
         private readonly Assembly _assembly;

@@ -37,7 +37,7 @@
             @*顶部操作栏*@
             <div class="btn-toolbar btn-toolbar-top">
                 @*新增*@
-                <button class="btn btn-default btn-sm js-periodic-jobs-list-edit"
+                <button class="btn btn-info btn-sm js-periodic-jobs-list-edit"
                         data-toggle="modal"
                         data-target="#myModal">
                     @Strings.Common_Created
@@ -56,7 +56,7 @@
                 @*删除*@
                 @if (!IsReadOnly)
                 {
-                    <button class="js-jobs-list-command btn btn-sm btn-default"
+                    <button class="js-jobs-list-command btn btn-sm btn-danger"
                         data-url="@Url.To("/periodic/remove")"
                         data-loading-text="@Strings.Common_Deleting"
                         data-confirm="@Strings.Common_DeleteConfirm"
@@ -108,7 +108,7 @@
                                 }
 
                                 @*编号*@
-                                <td class="word-break width-15">@job.Id</td>
+                                <td class="word-break width-15" style="min-width: 80px">@job.Id</td>
 
                                 @*Cron*@
                                 <td style="min-width: 125px" class="min-width">
@@ -147,7 +147,7 @@
                                 </td>
 
                                 @*作业*@
-                                <td class="word-break width-30">
+                                <td class="word-break width-30" style="min-width: 100px">
                                     @if (job.Job != null)
                                     {
                                         @: @Html.JobName(job.Job)
@@ -243,7 +243,7 @@
                                 </td>
 
                                 @*操作*@
-                                <td style="min-width:200px" class="align-right">
+                                <td style="min-width:100px" class="align-right">
                                     <button type="button" class="js-periodic-jobs-list-edit btn btn-info btn-xs"
                                         data-toggle="modal"
                                         data-target="#myModal"
@@ -252,17 +252,15 @@
                                     </button>
                                     @if (job.JobStateEnum == JobState.Running)
                                     {
+                                        @*停止*@
                                         <button type="button" class="js-period-jobs-list-command btn btn-warning btn-xs"
                                         data-url="@Url.To($"{PeriodicJobPage.PageRoute}/stop?jobId={job.Id}")">
                                             Stop
                                         </button>
-                                        <button class="js-period-jobs-list-command btn btn-primary btn-xs">
-                                            Excute
-                                        </button>
-                                        <button class="btn btn-danger btn-xs">Delete</button>
                                     }
                                     @if (job.JobStateEnum == JobState.Stoped)
                                     {
+                                        @*开启*@
                                         <button class="js-period-jobs-list-command btn btn-success btn-xs"
                                         data-url="@Url.To($"{PeriodicJobPage.PageRoute}/start?jobId={job.Id}")">
                                             Start
@@ -294,4 +292,4 @@
 
 
 @*<script src="@Url.To("/js0")"></script>*@
-<script src="@Url.To("/js-ext0")"></script>
+@*<script src="@Url.To("/js-ext0")"></script>*@

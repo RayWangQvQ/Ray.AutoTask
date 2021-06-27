@@ -47,9 +47,8 @@ namespace Ray.BiliBiliTool.OpenApi
             .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
             .UseSimpleAssemblyNameTypeSerializer()
             .UseRecommendedSerializerSettings()
-            .UseSQLiteStorage()
-            //.UseLiteDbStorage("Hangfire.db")
-            .UseConsole()
+            .UseSQLiteStorage()//sqlit持久化
+            .UseConsole()//dashboard日志
             .UseRecurringJobAdmin(typeof(Startup).Assembly)
             .UseDashboardExtensions(typeof(Startup).Assembly)
             );

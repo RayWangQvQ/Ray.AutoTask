@@ -126,7 +126,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ray.BiliBiliTool.Api", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangfire.RecurringJobAdmin", "src\Hangfire.RecurringJobAdmin\Hangfire.RecurringJobAdmin.csproj", "{F518B6A0-3B33-4894-8179-0BF62B5AC1AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangfire.Dashboard.Extensions", "src\Hangfire.Dashboard.Extensions\Hangfire.Dashboard.Extensions.csproj", "{3CA962AF-A7B4-41E0-807D-7AD6103FAD23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangfire.Dashboard.Extensions", "src\Hangfire.Dashboard.Extensions\Hangfire.Dashboard.Extensions.csproj", "{3CA962AF-A7B4-41E0-807D-7AD6103FAD23}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangfire.Console.Extensions", "src\Ray.Serilog.Sinks\Hangfire.Console.Extensions\Hangfire.Console.Extensions.csproj", "{80E4B79B-C2FF-4FD9-ACB6-98EB461B3B73}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangfire.Console.Extensions.Serilog", "src\Ray.Serilog.Sinks\Hangfire.Console.Extensions.Serilog\Hangfire.Console.Extensions.Serilog.csproj", "{157134A5-CAB6-4A25-8687-79F8BF3F6812}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -230,6 +234,14 @@ Global
 		{3CA962AF-A7B4-41E0-807D-7AD6103FAD23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CA962AF-A7B4-41E0-807D-7AD6103FAD23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CA962AF-A7B4-41E0-807D-7AD6103FAD23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80E4B79B-C2FF-4FD9-ACB6-98EB461B3B73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80E4B79B-C2FF-4FD9-ACB6-98EB461B3B73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80E4B79B-C2FF-4FD9-ACB6-98EB461B3B73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80E4B79B-C2FF-4FD9-ACB6-98EB461B3B73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{157134A5-CAB6-4A25-8687-79F8BF3F6812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{157134A5-CAB6-4A25-8687-79F8BF3F6812}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{157134A5-CAB6-4A25-8687-79F8BF3F6812}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{157134A5-CAB6-4A25-8687-79F8BF3F6812}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -270,6 +282,8 @@ Global
 		{F406FB93-2D74-44BE-941C-4887681F97B5} = {5AEAB26D-AE01-4C13-AF1A-86B8AE605AEE}
 		{F518B6A0-3B33-4894-8179-0BF62B5AC1AF} = {110D3D21-8E9B-45AB-9667-6DA1DB3862AC}
 		{3CA962AF-A7B4-41E0-807D-7AD6103FAD23} = {110D3D21-8E9B-45AB-9667-6DA1DB3862AC}
+		{80E4B79B-C2FF-4FD9-ACB6-98EB461B3B73} = {4BAFC980-7A73-45C3-9460-8B8CCB87939B}
+		{157134A5-CAB6-4A25-8687-79F8BF3F6812} = {4BAFC980-7A73-45C3-9460-8B8CCB87939B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {197319DA-1148-4A99-847C-8B270B6A29AB}

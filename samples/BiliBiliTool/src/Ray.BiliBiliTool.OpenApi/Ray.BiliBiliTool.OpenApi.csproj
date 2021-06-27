@@ -6,8 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.23" />
-    <PackageReference Include="Hangfire.Console" Version="1.4.2" />
-    <PackageReference Include="Hangfire.Console.Extensions.Serilog" Version="1.0.1.1" />
     <PackageReference Include="Hangfire.Core" Version="1.7.23" />
     <PackageReference Include="Hangfire.LiteDB" Version="0.4.0" />
     <PackageReference Include="Hangfire.Storage.SQLite" Version="0.3.0" />
@@ -18,6 +16,7 @@
     <ProjectReference Include="..\Hangfire.Dashboard.Extensions\Hangfire.Dashboard.Extensions.csproj" />
     <ProjectReference Include="..\Hangfire.RecurringJobAdmin\Hangfire.RecurringJobAdmin.csproj" />
     <ProjectReference Include="..\Ray.BiliBiliTool.Api\Ray.BiliBiliTool.Api.csproj" />
+    <ProjectReference Include="..\Ray.Serilog.Sinks\Hangfire.Console.Extensions.Serilog\Hangfire.Console.Extensions.Serilog.csproj" />
   </ItemGroup>
 
 </Project>

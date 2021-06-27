@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Hangfire.Annotations;
 using Hangfire.Dashboard.Extensions.Dispatchers;
+using Hangfire.Dashboard.Extensions.Extensions;
 using Hangfire.Dashboard.Extensions.Pages;
 using Hangfire.Dashboard.Extensions.Repositories;
 using Hangfire.Dashboard.Extensions.Resources;
@@ -78,7 +79,21 @@ namespace Hangfire.Dashboard.Extensions
         private static void CreateManagmentJob()
         {
             //注册js文件路由
+            /*
             DashboardRoutes.Routes.Add("/js-ext[0-9]+", new CombinedResourceDispatcher(
+                "application/javascript",
+                GetExecutingAssembly(),
+                GetContentFolderNamespace("js"),
+                Javascripts));
+            */
+
+            //Assembly assembly = IntrospectionExtensions.GetTypeInfo(typeof(ConfigurationExtensions)).Assembly;
+            //Assembly assembly = typeof(ConfigurationExtensions).Assembly;
+            string pathTemplate = DashboardRoutes.Routes.Contains("/js[0-9]+") ? "/js[0-9]+" : "/js[0-9]{3}";
+            //DashboardRoutes.Routes.Append(pathTemplate, new EmbeddedResourceDispatcher(assembly, "Hangfire.Dashboard.Extensions.Content.js.hangfire-ext.js", null));
+            //DashboardRoutes.Routes.Append(pathTemplate, new EmbeddedResourceDispatcher("application/javascript", assembly, "hangfire-ext.js"));
+            //DashboardRoutes.Routes.Append(pathTemplate, new DynamicJsDispatcher(options));
+            DashboardRoutes.Routes.Append(pathTemplate, new CombinedResourceDispatcher(
                 "application/javascript",
                 GetExecutingAssembly(),
                 GetContentFolderNamespace("js"),

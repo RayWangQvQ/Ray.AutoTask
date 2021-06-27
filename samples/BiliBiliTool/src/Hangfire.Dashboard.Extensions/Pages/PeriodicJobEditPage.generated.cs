@@ -182,17 +182,15 @@ WriteLiteral(@""">
 
                                                                                   Write(Url.To("/periodic/addOrUpdate"));
 
-WriteLiteral("\">Save changes</button>\r\n    </div>\r\n</div>\r\n\r\n\r\n<script src=\"");
+WriteLiteral("\">Save changes</button>\r\n    </div>\r\n</div>\r\n\r\n\r\n");
 
 
-        Write(Url.To("/js0"));
 
-WriteLiteral("\"></script>\r\n<script src=\"");
+WriteLiteral("\r\n");
 
 
-        Write(Url.To("/js-ext0"));
 
-WriteLiteral("\"></script>\r\n");
+WriteLiteral("\r\n");
 
 
         }
