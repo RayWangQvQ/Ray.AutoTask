@@ -116,14 +116,38 @@ WriteLiteral("\r\n            <div class=\"form-group\">\r\n                <lab
 
                                                         Write(Strings.RecurringJobsPage_Table_TimeZone);
 
-WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n                    <input type" +
-"=\"text\" class=\"form-control\"\r\n                           id=\"modal_TimeZoneId\"\r\n" +
-"                           value=\"");
+WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n                    <select cla" +
+"ss=\"form-control\" id=\"modal_TimeZone\">\r\n");
 
 
-                              Write(PeriodicJob?.TimeZoneId);
+                         foreach (var item in TimeZones)
+                        {
+                            var selected = item.Key == (PeriodicJob?.TimeZoneId ?? DefaultTimeZoneId)
+                                ? "selected"
+                                : "";
 
-WriteLiteral("\">\r\n                </div>\r\n            </div>\r\n\r\n            ");
+WriteLiteral("                            <option value=\"");
+
+
+                                      Write(item.Key);
+
+WriteLiteral("\" ");
+
+
+                                                 Write(selected);
+
+WriteLiteral(">");
+
+
+                                                           Write(item.Value);
+
+WriteLiteral("</option>\r\n");
+
+
+                        }
+
+WriteLiteral("                    </select>\r\n                </div>\r\n            </div>\r\n\r\n    " +
+"        ");
 
 
 

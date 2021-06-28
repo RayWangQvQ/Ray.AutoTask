@@ -53,9 +53,15 @@
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">@Strings.RecurringJobsPage_Table_TimeZone</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control"
-                           id="modal_TimeZoneId"
-                           value="@(PeriodicJob?.TimeZoneId)">
+                    <select class="form-control" id="modal_TimeZone">
+                        @foreach (var item in TimeZones)
+                        {
+                            var selected = item.Key == (PeriodicJob?.TimeZoneId ?? DefaultTimeZoneId)
+                                ? "selected"
+                                : "";
+                            <option value="@item.Key" @selected>@item.Value</option>
+                        }
+                    </select>
                 </div>
             </div>
 

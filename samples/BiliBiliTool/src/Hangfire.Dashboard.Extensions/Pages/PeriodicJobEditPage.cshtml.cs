@@ -28,10 +28,19 @@ namespace Hangfire.Dashboard.Extensions.Pages
 
         protected bool IsEdit => !string.IsNullOrWhiteSpace(JobId);
 
+        /// <summary>
+        /// 时区下拉列表
+        /// </summary>
+        protected Dictionary<string, string> TimeZones { get; set; }
+
+        protected virtual string DefaultTimeZoneId => "UTC";
+
         protected virtual void Init()
         {
             JobId = "";
             PeriodicJob = null;
+
+            TimeZones = GetTimeZones();
 
             JobId = Query("id");
             if (string.IsNullOrWhiteSpace(JobId))
@@ -50,6 +59,11 @@ namespace Hangfire.Dashboard.Extensions.Pages
             var result = _periodicJobRepository.GetPeriodicJobById(id);
             if (result == null) throw new Exception("JobId不存在");
             return result;
+        }
+
+        protected virtual Dictionary<string, string> GetTimeZones()
+        {
+            return TimeZoneInfo.GetSystemTimeZones().OrderBy(x => x.DisplayName).ToDictionary(k => k.Id, v => v.DisplayName);
         }
     }
 }
