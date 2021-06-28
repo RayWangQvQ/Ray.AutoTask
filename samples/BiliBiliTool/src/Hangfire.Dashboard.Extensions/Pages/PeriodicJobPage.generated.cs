@@ -64,7 +64,7 @@ WriteLiteral("\r\n");
 WriteLiteral(@"
 <!-- Modal模态框模板 -->
 <div class=""modal fade"" id=""myModal"" tabindex=""-1"" role=""dialog"" aria-labelledby=""myModalLabel"">
-    <div class=""modal-dialog modal-lg"" role=""document"">
+    <div class=""modal-dialog modal-lg"" id=""periodModalDialog"" role=""document"">
         <!-- 内容有具体事件决定加载 -->
     </div>
 </div>
@@ -737,15 +737,7 @@ WriteLiteral("\r\n");
 
             }
 
-WriteLiteral("        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n");
-
-
-
-WriteLiteral("\r\n");
-
-
-
-WriteLiteral("\r\n");
+WriteLiteral("        </div>\r\n    </div>\r\n</div>\r\n");
 
 
         }

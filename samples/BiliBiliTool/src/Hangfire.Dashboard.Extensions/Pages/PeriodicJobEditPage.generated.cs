@@ -123,8 +123,8 @@ WriteLiteral("</label>\r\n                <div class=\"col-sm-9\">\r\n          
                          foreach (var item in TimeZones)
                         {
                             var selected = item.Key == (PeriodicJob?.TimeZoneId ?? DefaultTimeZoneId)
-                                ? "selected"
-                                : "";
+                            ? "selected"
+                            : "";
 
 WriteLiteral("                            <option value=\"");
 
@@ -194,27 +194,19 @@ WriteLiteral(@"
 
                               Write(PeriodicJob?.MethodName);
 
-WriteLiteral(@""">
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class=""modal-footer"">
-        <button type=""button"" class=""btn btn-default"" data-dismiss=""modal"">Close</button>
-        <button type=""button"" class=""btn btn-primary"" id=""btnPeriodicSubmit"" data-url=""");
+WriteLiteral("\">\r\n                </div>\r\n            </div>\r\n        </form>\r\n    </div>\r\n    " +
+"<div class=\"modal-footer\">\r\n        <button type=\"button\" class=\"btn btn-default" +
+"\" data-dismiss=\"modal\">Close</button>\r\n        ");
+
+
+
+WriteLiteral("\r\n        <button type=\"button\" class=\"btn btn-primary\" id=\"btnPeriodicSubmit\" da" +
+"ta-url=\"");
 
 
                                                                                   Write(Url.To("/periodic/addOrUpdate"));
 
-WriteLiteral("\">Save changes</button>\r\n    </div>\r\n</div>\r\n\r\n\r\n");
-
-
-
-WriteLiteral("\r\n");
-
-
-
-WriteLiteral("\r\n");
+WriteLiteral("\">Save changes</button>\r\n    </div>\r\n</div>\r\n");
 
 
         }
