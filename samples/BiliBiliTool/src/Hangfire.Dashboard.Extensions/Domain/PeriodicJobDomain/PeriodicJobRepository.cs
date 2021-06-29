@@ -65,6 +65,10 @@ namespace Hangfire.Dashboard.Extensions.Repositories
 
                 });
             }
+
+            //排序
+            outPut = outPut.OrderByDescending(x => x.CreatedAt).ToList();
+
             return outPut;
         }
 
@@ -80,6 +84,10 @@ namespace Hangfire.Dashboard.Extensions.Repositories
                     outPut.Add(PeriodicJobModel.Create(jobId, connection, JobState.Running));
                 });
             }
+
+            //排序
+            outPut = outPut.OrderByDescending(x => x.CreatedAt).ToList();
+
             return outPut;
         }
 
@@ -89,6 +97,9 @@ namespace Hangfire.Dashboard.Extensions.Repositories
 
             result.AddRange(this.GetRunningPeriodicJobs());
             result.AddRange(this.GetStoppedPeriodicJobs());
+
+            //排序
+            result = result.OrderByDescending(x => x.CreatedAt).ToList();
 
             return result;
         }

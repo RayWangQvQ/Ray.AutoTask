@@ -24,6 +24,11 @@ namespace Hangfire.Dashboard.Extensions.Models
         public string Cron { get; set; }
 
         /// <summary>
+        /// 时区Id
+        /// </summary>
+        public string TimeZoneId { get; set; }
+
+        /// <summary>
         /// 所属队列
         /// </summary>
         public string Queue { get; set; }
@@ -82,11 +87,6 @@ namespace Hangfire.Dashboard.Extensions.Models
         /// 是否被移除
         /// </summary>
         public bool Removed { get; set; }
-
-        /// <summary>
-        /// 时区Id
-        /// </summary>
-        public string TimeZoneId { get; set; }
 
         /// <summary>
         /// 错误信息

@@ -113,6 +113,9 @@ namespace Hangfire.Dashboard.Extensions
             });
 
             //注册api
+            DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/stop", new PetiodicStopDispatcher());
+            DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/start", new PetiodicStartDispatcher());
+            DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/addOrUpdate", new PetiodicAddOrUpdateDispatcher());
             DashboardRoutes.Routes.AddBatchCommand($"{PeriodicJobPage.PageRoute}/remove",
                 (context, jobId) =>
                 {
@@ -126,13 +129,6 @@ namespace Hangfire.Dashboard.Extensions
                     }
                     manager.RemoveIfExists(jobId);
                 });
-
-
-            DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/stop", new PetiodicStopDispatcher());
-            DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/start", new PetiodicStartDispatcher());
-            DashboardRoutes.Routes.Add($"{PeriodicJobPage.PageRoute}/addOrUpdate", new PetiodicAddOrUpdateDispatcher());
-
-
         }
 
         internal static string GetContentFolderNamespace(string contentFolder)
