@@ -24,11 +24,11 @@ namespace Ray.BiliBiliTool.OpenApi.Extensions
             try
             {
                 backgroundJobs.Enqueue(() => Log.Information("Hello world from Hangfire!"));
-                //backgroundJobs.Enqueue<ITestAppService>(t => t.DoTask());
-                RecurringJob.AddOrUpdate<IDailyTaskAppService>("Daily1", t => t.DoTask(), "5 13 * * *", TimeZoneInfo.Local, typeof(IDailyTaskAppService).Description().ToLower());
-                RecurringJob.AddOrUpdate<IDailyTaskAppService>("Daily2", t => t.DoTask(), "5 3 * * *", TimeZoneInfo.Local, typeof(IDailyTaskAppService).Description().ToLower());
-                RecurringJob.AddOrUpdate<ILiveLotteryTaskAppService>("LiveLottery", t => t.DoTask(), "30 */2 * * *", TimeZoneInfo.Local, typeof(ILiveLotteryTaskAppService).Description().ToLower());
-                RecurringJob.AddOrUpdate<IUnfollowBatchedTaskAppService>("Unfollow", t => t.DoTask(), "0 0 * * 1", TimeZoneInfo.Local, typeof(IUnfollowBatchedTaskAppService).Description().ToLower());
+
+                RecurringJob.AddOrUpdate<ITestAppService>("Test", t => t.DoTask(), "0 0 1 * *", TimeZoneInfo.Local);
+                RecurringJob.AddOrUpdate<IDailyTaskAppService>("Daily", t => t.DoTask(), "5 3 * * *", TimeZoneInfo.Local);
+                RecurringJob.AddOrUpdate<ILiveLotteryTaskAppService>("LiveLottery", t => t.DoTask(), "30 */2 * * *", TimeZoneInfo.Local);
+                RecurringJob.AddOrUpdate<IUnfollowBatchedTaskAppService>("Unfollow", t => t.DoTask(), "0 0 * * 1", TimeZoneInfo.Local);
             }
             catch
             {

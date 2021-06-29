@@ -9,10 +9,12 @@ namespace Hangfire.Console.Extensions.Serilog
     public class HangfireSink : ILogEventSink
     {
         private readonly IFormatProvider formatProvider;
+        private readonly LogEventLevel restrictedToMinimumLevel;
 
-        public HangfireSink(IFormatProvider formatProvider)
+        public HangfireSink(IFormatProvider formatProvider, LogEventLevel restrictedToMinimumLevel = LogEventLevel.Verbose)
         {
             this.formatProvider = formatProvider;
+            this.restrictedToMinimumLevel = restrictedToMinimumLevel;
         }
 
         private static string GetLogLevelString(LogEventLevel logLevel)
@@ -59,6 +61,8 @@ namespace Hangfire.Console.Extensions.Serilog
 
         public void Emit(LogEvent logEvent)
         {
+            if (logEvent.Level < restrictedToMinimumLevel) return;
+
             if (logEvent.Properties.TryGetValue("HangFireJob", out var logEventPerformContext))
             {
                 // Get the object reference from our custom property
