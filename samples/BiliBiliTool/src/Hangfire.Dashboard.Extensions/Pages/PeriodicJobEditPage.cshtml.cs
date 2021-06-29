@@ -22,7 +22,7 @@ namespace Hangfire.Dashboard.Extensions.Pages
 
         protected string JobId = "";
 
-        protected PeriodicJobModel PeriodicJob;
+        protected PeriodicJob PeriodicJob;
 
         public string Title { get; set; }
 
@@ -54,7 +54,7 @@ namespace Hangfire.Dashboard.Extensions.Pages
             }
         }
 
-        protected virtual PeriodicJobModel GetJobById(string id)
+        protected virtual PeriodicJob GetJobById(string id)
         {
             var result = _periodicJobRepository.GetPeriodicJobById(id);
             if (result == null) throw new Exception("JobId不存在");

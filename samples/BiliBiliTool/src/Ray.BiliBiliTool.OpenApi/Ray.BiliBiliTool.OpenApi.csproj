@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hangfire.Dashboard.Extensions\Hangfire.Dashboard.Extensions.csproj" />
-    <ProjectReference Include="..\Hangfire.RecurringJobAdmin\Hangfire.RecurringJobAdmin.csproj" />
     <ProjectReference Include="..\Ray.BiliBiliTool.Api\Ray.BiliBiliTool.Api.csproj" />
     <ProjectReference Include="..\Ray.Serilog.Sinks\Hangfire.Console.Extensions.Serilog\Hangfire.Console.Extensions.Serilog.csproj" />
   </ItemGroup>

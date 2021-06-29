@@ -14,7 +14,7 @@ namespace Hangfire.Dashboard.Extensions.Models
     /// It is used to build <see cref="RecurringJob"/> 
     /// with <see cref="IRecurringJobBuilder.Build(Func{System.Collections.Generic.IEnumerable{RecurringJobInfo}})"/>.
     /// </summary>
-    public class PeriodicJobModel
+    public class PeriodicJob
     {
         public string Id { get; set; }
 
@@ -176,9 +176,9 @@ namespace Hangfire.Dashboard.Extensions.Models
         }
 
 
-        public static PeriodicJobModel Create(string jobId, IStorageConnection connection, JobState jobState)
+        public static PeriodicJob Create(string jobId, IStorageConnection connection, JobState jobState)
         {
-            var dto = new PeriodicJobModel();
+            var dto = new PeriodicJob();
 
             Dictionary<string, string> dataJob = connection.GetAllEntriesFromHash($"{tagRecurringJob}:{jobId}");
 

@@ -1,26 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Hangfire;
 using Hangfire.Console;
-using Hangfire.Console.Extensions;
-using Hangfire.LiteDB;
-using Hangfire.RecurringJobAdmin;
-using Hangfire.Server;
 using Hangfire.Storage.SQLite;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Ray.BiliBiliTool.OpenApi.Extensions;
 using Hangfire.Dashboard.Extensions;
-using System.Reflection;
+using Hangfire.Console.Extensions;
 
 namespace Ray.BiliBiliTool.OpenApi
 {
@@ -49,7 +38,7 @@ namespace Ray.BiliBiliTool.OpenApi
             .UseRecommendedSerializerSettings()
             .UseSQLiteStorage()//sqlit持久化
             .UseConsole()//dashboard日志
-            .UseRecurringJobAdmin(typeof(Startup).Assembly)
+            //.UseRecurringJobAdmin(typeof(Startup).Assembly)
             .UseDashboardExtensions(typeof(Startup).Assembly)
             );
             services.AddHangfireServer();

@@ -29,7 +29,7 @@ namespace Hangfire.Dashboard.Extensions.Repositories
         /// </summary>
         public const string tagStopJob = "recurring-jobs-stop";
 
-        public List<PeriodicJobModel> GetPeriodicJobs(JobState? jobState = null)
+        public List<PeriodicJob> GetPeriodicJobs(JobState? jobState = null)
         {
             return jobState switch
             {
@@ -39,9 +39,9 @@ namespace Hangfire.Dashboard.Extensions.Repositories
             };
         }
 
-        public PeriodicJobModel GetPeriodicJobById(string id)
+        public PeriodicJob GetPeriodicJobById(string id)
         {
-            List<PeriodicJobModel> list = GetPeriodicJobs();
+            List<PeriodicJob> list = GetPeriodicJobs();
             return list.FirstOrDefault(x => x.Id == id);
         }
 
@@ -52,16 +52,16 @@ namespace Hangfire.Dashboard.Extensions.Repositories
         /// 获取已停止的周期作业
         /// </summary>
         /// <returns></returns>
-        private List<PeriodicJobModel> GetStoppedPeriodicJobs()
+        private List<PeriodicJob> GetStoppedPeriodicJobs()
         {
-            var outPut = new List<PeriodicJobModel>();
+            var outPut = new List<PeriodicJob>();
             using (IStorageConnection connection = GetConnection())
             {
                 HashSet<string> allJobStopped = connection.GetAllItemsFromSet(tagStopJob);
 
                 allJobStopped.ToList().ForEach(jobId =>
                 {
-                    outPut.Add(PeriodicJobModel.Create(jobId, connection, JobState.Stoped));
+                    outPut.Add(PeriodicJob.Create(jobId, connection, JobState.Stoped));
 
                 });
             }
@@ -72,16 +72,16 @@ namespace Hangfire.Dashboard.Extensions.Repositories
             return outPut;
         }
 
-        private List<PeriodicJobModel> GetRunningPeriodicJobs()
+        private List<PeriodicJob> GetRunningPeriodicJobs()
         {
-            var outPut = new List<PeriodicJobModel>();
+            var outPut = new List<PeriodicJob>();
             using (IStorageConnection connection = GetConnection())
             {
                 HashSet<string> allJobStopped = connection.GetAllItemsFromSet(tagRecurringJobs);
 
                 allJobStopped.ToList().ForEach(jobId =>
                 {
-                    outPut.Add(PeriodicJobModel.Create(jobId, connection, JobState.Running));
+                    outPut.Add(PeriodicJob.Create(jobId, connection, JobState.Running));
                 });
             }
 
@@ -91,9 +91,9 @@ namespace Hangfire.Dashboard.Extensions.Repositories
             return outPut;
         }
 
-        private List<PeriodicJobModel> GetAllPeriodicJobs()
+        private List<PeriodicJob> GetAllPeriodicJobs()
         {
-            var result = new List<PeriodicJobModel>();
+            var result = new List<PeriodicJob>();
 
             result.AddRange(this.GetRunningPeriodicJobs());
             result.AddRange(this.GetStoppedPeriodicJobs());
@@ -138,7 +138,7 @@ namespace Hangfire.Dashboard.Extensions.Repositories
             }
         }
 
-        public void AddOrUpdate(PeriodicJobModel periodicJob)
+        public void AddOrUpdate(PeriodicJob periodicJob)
         {
             var job = periodicJob;
             var timeZone = TimeZoneInfo.Utc;

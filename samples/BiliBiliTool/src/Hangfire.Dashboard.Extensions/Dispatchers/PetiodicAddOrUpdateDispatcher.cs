@@ -31,7 +31,7 @@ namespace Hangfire.Dashboard.Extensions.Dispatchers
 
         public async Task Dispatch([NotNull] Dashboard.DashboardContext context)
         {
-            var job = new PeriodicJobModel();
+            var job = new PeriodicJob();
             job.Id = (await context.Request.GetFormValuesAsync("Id").ConfigureAwait(false)).FirstOrDefault();
             job.Cron = (await context.Request.GetFormValuesAsync("Cron").ConfigureAwait(false)).FirstOrDefault();
             job.Queue = (await context.Request.GetFormValuesAsync("Queue").ConfigureAwait(false)).FirstOrDefault();

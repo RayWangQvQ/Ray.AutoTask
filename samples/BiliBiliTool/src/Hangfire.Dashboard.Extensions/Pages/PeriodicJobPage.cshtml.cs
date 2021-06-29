@@ -35,13 +35,13 @@ namespace Hangfire.Dashboard.Extensions.Pages
             periodicJobs.AddRange(_periodicJobRepository.GetPeriodicJobs());
         }
 
-        public List<PeriodicJobModel> periodicJobs = new List<PeriodicJobModel>();
+        public List<PeriodicJob> periodicJobs = new List<PeriodicJob>();
 
         public int from;
         public int perPage;
 
         public Pager pager;
 
-        public PeriodicJobModel PeriodicModel = new PeriodicJobModel();
+        public PeriodicJob PeriodicModel = new PeriodicJob();
     }
 }

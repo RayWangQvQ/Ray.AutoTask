@@ -35,7 +35,7 @@ namespace Hangfire.Dashboard.Extensions.Dispatchers
                 return;
             }
 
-            var periodicJob = new List<PeriodicJobModel>();
+            var periodicJob = new List<PeriodicJob>();
             periodicJob.AddRange(_periodicJobRepository.GetPeriodicJobs());
 
             await context.Response.WriteAsync(JsonConvert.SerializeObject(periodicJob));
