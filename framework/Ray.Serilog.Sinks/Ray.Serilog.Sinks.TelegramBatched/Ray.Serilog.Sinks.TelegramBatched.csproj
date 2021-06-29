@@ -8,4 +8,9 @@
     <PackageReference Include="Serilog" Version="2.10.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Ray.Infrastructure\Ray.Infrastructure.csproj" />
+    <ProjectReference Include="..\Ray.Serilog.Sinks.Batched\Ray.Serilog.Sinks.Batched.csproj" />
+  </ItemGroup>
+
 </Project>

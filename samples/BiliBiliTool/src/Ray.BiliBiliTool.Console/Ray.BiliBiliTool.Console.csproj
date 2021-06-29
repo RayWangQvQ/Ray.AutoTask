@@ -31,13 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ray.BiliBiliTool.Agent\Ray.BiliBiliTool.Agent.csproj" />
     <ProjectReference Include="..\Ray.BiliBiliTool.Api\Ray.BiliBiliTool.Api.csproj" />
-    <ProjectReference Include="..\Ray.BiliBiliTool.Application.Contracts\Ray.BiliBiliTool.Application.Contracts.csproj" />
-    <ProjectReference Include="..\Ray.BiliBiliTool.Application\Ray.BiliBiliTool.Application.csproj" />
-    <ProjectReference Include="..\Ray.BiliBiliTool.Config\Ray.BiliBiliTool.Config.csproj" />
-    <ProjectReference Include="..\Ray.BiliBiliTool.DomainService\Ray.BiliBiliTool.DomainService.csproj" />
-    <ProjectReference Include="..\Ray.BiliBiliTool.Infrastructure\Ray.BiliBiliTool.Infrastructure.csproj" />
     <ProjectReference Include="..\Ray.Serilog.Sinks\Ray.Serilog.Sinks.Batched\Ray.Serilog.Sinks.Batched.csproj" />
     <ProjectReference Include="..\Ray.Serilog.Sinks\Ray.Serilog.Sinks.CoolPushBatched\Ray.Serilog.Sinks.CoolPushBatched.csproj" />
     <ProjectReference Include="..\Ray.Serilog.Sinks\Ray.Serilog.Sinks.DingTalkBatched\Ray.Serilog.Sinks.DingTalkBatched.csproj" />
