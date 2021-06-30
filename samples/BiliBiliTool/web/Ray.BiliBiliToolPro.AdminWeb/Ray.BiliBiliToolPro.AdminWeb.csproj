@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.5" />
+    <PackageReference Include="WalkingTec.Mvvm.Mvc" Version="5.2.6" />
+   <ProjectReference Include="..\Ray.BiliBiliToolPro.AdminWeb.Client\Ray.BiliBiliToolPro.AdminWeb.Client.csproj" />
+   <ProjectReference Include="..\Ray.BiliBiliToolPro.AdminWeb.Shared\Ray.BiliBiliToolPro.AdminWeb.Shared.csproj" />
+    <ProjectReference Include="..\Ray.BiliBiliToolPro.AdminWeb.DataAccess\Ray.BiliBiliToolPro.AdminWeb.DataAccess.csproj" />
+</ItemGroup>
+</Project>
+
