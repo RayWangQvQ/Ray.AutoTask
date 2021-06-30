@@ -57,6 +57,7 @@ namespace Ray.BiliBiliTool.OpenApi
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseMyTasks(backgroundJobs);
 
             app.UseRouting();

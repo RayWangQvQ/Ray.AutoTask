@@ -19,7 +19,10 @@ namespace Ray.BiliBiliTool.OpenApi.Extensions
         {
             var logger = app.ApplicationServices.GetRequiredService<ILogger<Startup>>();
 
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard(options: new DashboardOptions
+            {
+                Authorization = new[] { new HangfireAuthorizationFilter() }
+            });
 
             try
             {
