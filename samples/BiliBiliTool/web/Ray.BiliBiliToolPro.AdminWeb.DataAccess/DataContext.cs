@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Ray.BiliBiliToolPro.AdminWeb.Model;
 using WalkingTec.Mvvm.Core;
 
 namespace Ray.BiliBiliToolPro.AdminWeb.DataAccess
@@ -9,6 +10,7 @@ namespace Ray.BiliBiliToolPro.AdminWeb.DataAccess
     public class DataContext : FrameworkContext
     {
         public DbSet<FrameworkUser> FrameworkUsers { get; set; }
+        public DbSet<School> Schools { get; set; }
 
 
         public DataContext(CS cs)
@@ -26,7 +28,7 @@ namespace Ray.BiliBiliToolPro.AdminWeb.DataAccess
         {
         }
 
-        
+
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public override async Task<bool> DataInit(object allModules, bool IsSpa)
@@ -55,7 +57,7 @@ namespace Ray.BiliBiliToolPro.AdminWeb.DataAccess
                     UserCode = user.ITCode,
                     RoleCode = "001"
                 };
-                
+
                 var adminmenus = Set<FrameworkMenu>().Where(x => x.Url != null && x.Url.StartsWith("/api") == false).ToList();
                 foreach (var item in adminmenus)
                 {
