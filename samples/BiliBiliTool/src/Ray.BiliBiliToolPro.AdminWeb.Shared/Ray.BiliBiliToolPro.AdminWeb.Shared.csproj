@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="BootstrapBlazor" Version="5.0.36" />
+    <ProjectReference Include="..\Ray.BiliBiliToolPro.AdminWeb.ViewModel\Ray.BiliBiliToolPro.AdminWeb.ViewModel.csproj" />
+  </ItemGroup >
+</Project>
+
